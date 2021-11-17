@@ -8,25 +8,39 @@ import javax.swing.*;
 
 public class Menu {
 	
-	JLabel timeMsg;
-	JLabel timeLabel;
-	JFrame frame;
-	Timer timer;
+	private JLabel timeMsg;
+	private JLabel timeLabel;
+	private JFrame frame;
+	private Timer timer;
+	private JPanel panel;
 	
 	public Menu() {
 		
 		this.frame = new JFrame("Journal");
 		this.timeLabel = new JLabel(getDateTime(), JLabel.CENTER);
+		this.timeMsg  = new JLabel("System time:");
+		this.panel = new JPanel();
 		
-		//exit_on_close kills program once window has been shut
+		//configure bounds
+		timeLabel.setBounds(-30, -15, 200, 100);
+		timeMsg.setBounds(12,5,100,20);
+		
+		
+		
+		
+		//configure frame and add panel
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
 		frame.setLocationRelativeTo(null);
-		frame.setBounds(0, 0, 500, 500);
+		frame.setSize(300,300);
+		frame.add(panel);
 		
-		timeLabel.setVisible(true);
-		frame.add(timeLabel);
+		panel.setLayout(null);
+		
+		//add components to panel
+		panel.add(timeLabel);
+		panel.add(timeMsg);
+		
+		frame.setVisible(true);
 		
 		ActionListener taskPerformer = new ActionListener() {
 		    public void actionPerformed(ActionEvent evt) {
