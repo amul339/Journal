@@ -1,6 +1,9 @@
 package journal;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Timer;
 
 public class Main {
 	
@@ -8,9 +11,10 @@ public class Main {
 		// TODO Auto-generated method stub
 		Menu menu = new Menu();
 		
-		while (menu.getMenuFrame().isVisible()) {
-			menu.updateTimeLabel();
-		}
+		
+		System.out.println("bruh");
+		
+		
 		
 	}
 	
