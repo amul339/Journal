@@ -13,6 +13,7 @@ public class Menu {
 	private JFrame frame;
 	private Timer timer;
 	private JPanel panel;
+	private JButton button;
 	
 	public Menu() {
 		
@@ -20,10 +21,12 @@ public class Menu {
 		this.timeLabel = new JLabel(getDateTime(), JLabel.CENTER);
 		this.timeMsg  = new JLabel("System time:");
 		this.panel = new JPanel();
+		this.button = new JButton("About");
 		
 		//configure bounds
 		timeLabel.setBounds(-30, -15, 200, 100);
 		timeMsg.setBounds(12,5,100,20);
+		button.setBounds(390,10,80,25);
 		
 		
 		
@@ -31,7 +34,7 @@ public class Menu {
 		//configure frame and add panel
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		frame.setSize(300,300);
+		frame.setSize(500,500);
 		frame.add(panel);
 		
 		panel.setLayout(null);
@@ -39,6 +42,7 @@ public class Menu {
 		//add components to panel
 		panel.add(timeLabel);
 		panel.add(timeMsg);
+		panel.add(button);
 		
 		frame.setVisible(true);
 		
