@@ -7,12 +7,15 @@ import javax.swing.*;
 public class Menu {
 	
 	
-	static JLabel timeLabel = new JLabel();
+	JLabel timeLabel;
+	JFrame frame;
 	
 	public Menu() {
 		
-		JFrame frame = new JFrame("Journal");
+		this.frame = new JFrame("Journal");
+		this.timeLabel = new JLabel();
 		
+		//exit_on_close kills program once window has been shut
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
@@ -22,6 +25,7 @@ public class Menu {
 		timeLabel.setBounds(0, 0, 10, 50);
 		timeLabel.setVisible(true);
 		frame.add(timeLabel);
+		
 	}
 	
 	
@@ -39,8 +43,12 @@ public class Menu {
 		timeLabel.setText(getDateTime());
 	}
 		
-	public static JLabel getTimeLabel() {
-		return timeLabel;
+	public JLabel getTimeLabel() {
+		return this.timeLabel;
+	}
+	
+	public JFrame getMenuFrame() {
+		return this.frame;
 	}
 	
 }

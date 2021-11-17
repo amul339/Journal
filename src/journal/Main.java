@@ -8,7 +8,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		Menu menu = new Menu();
 		
-		while(true) {
+		while (menu.getMenuFrame().isVisible()) {
 			menu.updateTimeLabel();
 		}
 		
