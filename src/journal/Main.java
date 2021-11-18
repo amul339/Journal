@@ -1,10 +1,5 @@
 package journal;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
-
 public class Main {
 	
 	public static void main(String[] args) {
