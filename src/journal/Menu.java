@@ -1,5 +1,7 @@
 package journal;
 
+import java.awt.Dimension;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
@@ -7,6 +9,10 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
 public class Menu {
+	
+	private static DefaultListModel<Task> listModelTasks = new DefaultListModel<Task>();
+	private static JList<Task> listTasks = new JList<Task>();
+	private static JScrollPane scrollTasks = new JScrollPane(listTasks);
 	
 	private JLabel timeMsg, timeLabel;
 	private JFrame frameMain;
@@ -18,10 +24,16 @@ public class Menu {
 	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad;
 	
 	
+	
+	
+	
 	public Menu() {
+		
+		
 		
 		//assign frames
 		this.frameMain = new JFrame("Journal");
+		
 		
 		//assignment toolbar and menu items
 		this.menuBar = new JMenuBar();
@@ -38,9 +50,6 @@ public class Menu {
 		this.panelMain = new JPanel();
 		this.buttonPLH = new JButton("PLH");
 		this.buttonPLH2 = new JButton("PLH2");
-				
-		
-		
 
 		menuHelp.add(mItemAbout);
 		menuFile.add(mItemLoad);
@@ -57,7 +66,14 @@ public class Menu {
 		mItemLoad.setEnabled(false);
 		buttonPLH.setEnabled(false);
 		buttonPLH2.setEnabled(false);
+		listTasks.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		listTasks.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		listTasks.setModel(listModelTasks);
 		
+		//scrollTasks.setPreferredSize(new Dimension(200,80));
+		
+		scrollTasks.setBounds(12, 50, 225, 360);
+		scrollTasks.setVisible(true);
 		
 		//configure main frame and add panel
 		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,6 +91,7 @@ public class Menu {
 		panelMain.add(timeMsg);
 		panelMain.add(buttonPLH);
 		panelMain.add(buttonPLH2);
+		panelMain.add(scrollTasks);
 		
 		
 		mItemAbout.addActionListener(new ActionListener() {
@@ -114,7 +131,7 @@ public class Menu {
 	
 	
 	//returns current LocalDateTime in string format.
-	public static String getDateTime() {
+	private static String getDateTime() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		String dateTime = java.time.LocalDateTime.now().format(formatter);
 			
@@ -123,7 +140,7 @@ public class Menu {
 	}
 		
 		//update timeLabel with current time.
-	public void updateTimeLabel() {
+	private void updateTimeLabel() {
 		this.timeLabel.setText(getDateTime());
 	}
 		
@@ -135,5 +152,8 @@ public class Menu {
 		return this.frameMain;
 	}
 	
+	public static DefaultListModel<Task> getListModelTasks() {
+		return listModelTasks;
+	}
 	
 }

@@ -1,5 +1,8 @@
 package journal;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -36,9 +39,15 @@ public class DeleteTasksUI {
 		panelClrAllTask.add(buttonClrCont);
 		
 		frameClrAllTask.setVisible(true);
+		
+		buttonClrCont.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//clear all tasks
+				Menu.getListModelTasks().removeAllElements();
+				frameClrAllTask.dispose();
+			}
+		});
+		
 	}
-	
-	public static void ClearAllTasks() {
-		Main.getTaskList().clear();
-	}
+
 }

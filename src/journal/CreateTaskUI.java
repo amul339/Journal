@@ -70,7 +70,7 @@ public class CreateTaskUI {
 				final String currentTaskDescription = txtTask.getText();
 				Type currenttaskType;
 				
-				if (currentTaskDescription != null) {
+				if (!currentTaskDescription.isBlank()) {
 				
 					switch(comboTaskType.getSelectedItem().toString()) {
 						case"End of Day":
@@ -87,10 +87,13 @@ public class CreateTaskUI {
 					
 					
 					if(chkboxCritical.isSelected()) {
-						Main.getTaskList().add(new Task(currenttaskType, true, currentTaskDescription));
+						Task newTask = new Task(currenttaskType, true, currentTaskDescription);
+						Menu.getListModelTasks().addElement(newTask);
 					}
 					else {
-						Main.getTaskList().add(new Task(currenttaskType, false, currentTaskDescription));
+						Task newTask = new Task(currenttaskType, false, currentTaskDescription);
+						Menu.getListModelTasks().addElement(newTask);
+						
 					}
 					//put task in list to be displayed on main menu
 					
@@ -101,6 +104,7 @@ public class CreateTaskUI {
 					
 				}
 			}
+			
 		});
 		
 	}

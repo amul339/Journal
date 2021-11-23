@@ -20,9 +20,6 @@ public class Task {
 		this.isCritical = isCritical;
 	}
 	
-	public String getTask() {
-		return this.task;
-	}
 	public Type getTaskType() {
 		return this.taskType;
 	}
@@ -31,4 +28,9 @@ public class Task {
 		return this.isCritical;
 	}
 	
+	
+	@Override 
+	public String toString() {
+		return task;
+	}
 }
