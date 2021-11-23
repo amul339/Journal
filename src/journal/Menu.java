@@ -1,7 +1,5 @@
 package journal;
 
-import java.awt.BorderLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +16,7 @@ public class Menu {
 	private JMenuBar menuBar;
 	private JMenu menuFile, menuHelp;
 	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad;
+	
 	
 	public Menu() {
 		
@@ -39,6 +38,8 @@ public class Menu {
 		this.panelMain = new JPanel();
 		this.buttonPLH = new JButton("PLH");
 		this.buttonPLH2 = new JButton("PLH2");
+				
+		
 		
 
 		menuHelp.add(mItemAbout);
@@ -53,6 +54,9 @@ public class Menu {
 		timeMsg.setBounds(12,5,100,20);
 		buttonPLH.setBounds(390,10,80,25);
 		buttonPLH2.setBounds(390,50,80,25);
+		mItemLoad.setEnabled(false);
+		buttonPLH.setEnabled(false);
+		buttonPLH2.setEnabled(false);
 		
 		
 		//configure main frame and add panel
@@ -97,7 +101,6 @@ public class Menu {
 		ActionListener clkPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 		    	updateTimeLabel();
-		    	System.out.println("debug");
 		    }
 		};
 		this.timer = new Timer(1000, clkPerformer);
@@ -112,7 +115,7 @@ public class Menu {
 	
 	//returns current LocalDateTime in string format.
 	public static String getDateTime() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		String dateTime = java.time.LocalDateTime.now().format(formatter);
 			
 		return dateTime;
@@ -131,5 +134,6 @@ public class Menu {
 	public JFrame getMenuFrame() {
 		return this.frameMain;
 	}
+	
 	
 }

@@ -37,4 +37,8 @@ public class DeleteTasksUI {
 		
 		frameClrAllTask.setVisible(true);
 	}
+	
+	public static void ClearAllTasks() {
+		Main.getTaskList().clear();
+	}
 }

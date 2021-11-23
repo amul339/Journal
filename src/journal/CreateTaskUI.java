@@ -1,6 +1,7 @@
 package journal;
 
 import java.awt.event.ActionEvent;
+import journal.Task.Type;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -42,6 +43,7 @@ public class CreateTaskUI {
 		labelTaskType.setBounds(10, 60, 150, 20);
 		comboTaskType.setBounds(10, 85, 100, 20);
 		chkboxCritical.setBounds(150, 85 , 100, 20);
+		buttonTaskOk.setBounds(365, 40, 80, 25);
 		
 		//configure 'create task' frame and add panel
 		frameCreateTask.setSize(500,200);
@@ -57,6 +59,7 @@ public class CreateTaskUI {
 		panelCreateTask.add(txtTask);
 		panelCreateTask.add(labeltxtTask);
 		panelCreateTask.add(labelTaskType);
+		panelCreateTask.add(buttonTaskOk);
 		
 		frameCreateTask.setVisible(true);
 				
@@ -64,8 +67,39 @@ public class CreateTaskUI {
 			public void actionPerformed(ActionEvent e) {
 				//create task instance if textbox has content, get input from textbox and additional settings.
 				
+				final String currentTaskDescription = txtTask.getText();
+				Type currenttaskType;
 				
-				//put task in list to be displayed on main menu
+				if (currentTaskDescription != null) {
+				
+					switch(comboTaskType.getSelectedItem().toString()) {
+						case"End of Day":
+							currenttaskType = Task.Type.EOD;
+						case"End of Week":
+							currenttaskType = Task.Type.EOW;
+							break;
+						case"No Expiration":
+							currenttaskType = Task.Type.INDEFINITE;
+							break;
+						default:
+							currenttaskType = Task.Type.EOD;
+					}
+					
+					
+					if(chkboxCritical.isSelected()) {
+						Main.getTaskList().add(new Task(currenttaskType, true, currentTaskDescription));
+					}
+					else {
+						Main.getTaskList().add(new Task(currenttaskType, false, currentTaskDescription));
+					}
+					//put task in list to be displayed on main menu
+					
+					//refresh main menu list 
+					
+					
+					frameCreateTask.dispose();
+					
+				}
 			}
 		});
 		

@@ -23,7 +23,6 @@ public class Task {
 	public String getTask() {
 		return this.task;
 	}
-	
 	public Type getTaskType() {
 		return this.taskType;
 	}
@@ -31,4 +30,5 @@ public class Task {
 	public boolean checkIfCritical() {
 		return this.isCritical;
 	}
+	
 }
