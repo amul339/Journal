@@ -1,7 +1,5 @@
 package journal;
 
-import java.awt.Dimension;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
@@ -10,18 +8,15 @@ import javax.swing.*;
 
 public class Menu {
 	
-	private static DefaultListModel<Task> listModelTasks = new DefaultListModel<Task>();
-	private static JList<Task> listTasks = new JList<Task>();
-	private static JScrollPane scrollTasks = new JScrollPane(listTasks);
-	
 	private JLabel timeMsg, timeLabel;
 	private JFrame frameMain;
 	private Timer timer;
 	private JPanel panelMain;
 	private JButton buttonPLH, buttonPLH2;
 	private JMenuBar menuBar;
-	private JMenu menuFile, menuHelp;
+	private JMenu menuFile, menuUtilities, menuHelp;
 	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad;
+	private menuTable menuTable;
 	
 	
 	
@@ -29,16 +24,15 @@ public class Menu {
 	
 	public Menu() {
 		
-		
-		
 		//assign frames
 		this.frameMain = new JFrame("Journal");
 		
 		
-		//assignment toolbar and menu items
+		//assignment tool-bar and menu items
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
 		this.menuHelp = new JMenu("Help");
+		this.menuUtilities = new JMenu("Utilities");
 		this.mItemAbout = new JMenuItem("About");
 		this.mItemLoad = new JMenuItem("Load");
 		this.mItemCreateTask = new JMenuItem("Create Task");
@@ -50,12 +44,15 @@ public class Menu {
 		this.panelMain = new JPanel();
 		this.buttonPLH = new JButton("PLH");
 		this.buttonPLH2 = new JButton("PLH2");
+		
+		this.menuTable = new menuTable();
 
 		menuHelp.add(mItemAbout);
 		menuFile.add(mItemLoad);
 		menuFile.add(mItemCreateTask);
 		menuFile.add(mItemClrAllTask);
 		menuBar.add(menuFile);
+		menuBar.add(menuUtilities);
 		menuBar.add(menuHelp);
 		
 		//configure bounds for main panel components
@@ -63,17 +60,10 @@ public class Menu {
 		timeMsg.setBounds(12,5,100,20);
 		buttonPLH.setBounds(390,10,80,25);
 		buttonPLH2.setBounds(390,50,80,25);
+		menuUtilities.setEnabled(false);
 		mItemLoad.setEnabled(false);
 		buttonPLH.setEnabled(false);
 		buttonPLH2.setEnabled(false);
-		listTasks.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		listTasks.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		listTasks.setModel(listModelTasks);
-		
-		//scrollTasks.setPreferredSize(new Dimension(200,80));
-		
-		scrollTasks.setBounds(12, 50, 225, 360);
-		scrollTasks.setVisible(true);
 		
 		//configure main frame and add panel
 		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,7 +81,7 @@ public class Menu {
 		panelMain.add(timeMsg);
 		panelMain.add(buttonPLH);
 		panelMain.add(buttonPLH2);
-		panelMain.add(scrollTasks);
+		panelMain.add(journal.menuTable.getScrollTasks());
 		
 		
 		mItemAbout.addActionListener(new ActionListener() {
@@ -131,7 +121,7 @@ public class Menu {
 	
 	
 	//returns current LocalDateTime in string format.
-	private static String getDateTime() {
+	public static String getDateTime() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		String dateTime = java.time.LocalDateTime.now().format(formatter);
 			
@@ -151,9 +141,4 @@ public class Menu {
 	public JFrame getMenuFrame() {
 		return this.frameMain;
 	}
-	
-	public static DefaultListModel<Task> getListModelTasks() {
-		return listModelTasks;
-	}
-	
 }

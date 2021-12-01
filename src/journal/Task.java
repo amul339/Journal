@@ -4,7 +4,7 @@ public class Task {
 	
 	private Type taskType;
 	private boolean isCritical;
-	private String task;
+	private String task, timeAdded;
 	
 	
 	enum Type {
@@ -18,6 +18,7 @@ public class Task {
 		this.taskType = taskType;
 		this.task = task;
 		this.isCritical = isCritical;
+		this.timeAdded = Menu.getDateTime();
 	}
 	
 	public Type getTaskType() {
@@ -28,6 +29,9 @@ public class Task {
 		return this.isCritical;
 	}
 	
+	public String getTimeAdded() {
+		return timeAdded;
+	}
 	
 	@Override 
 	public String toString() {

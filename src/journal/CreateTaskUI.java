@@ -88,12 +88,13 @@ public class CreateTaskUI {
 					
 					if(chkboxCritical.isSelected()) {
 						Task newTask = new Task(currenttaskType, true, currentTaskDescription);
-						Menu.getListModelTasks().addElement(newTask);
+						menuTable.getTaskDirectoryArray().add(newTask);
+						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), newTask.getTimeAdded()});
 					}
 					else {
 						Task newTask = new Task(currenttaskType, false, currentTaskDescription);
-						Menu.getListModelTasks().addElement(newTask);
-						
+						menuTable.getTaskDirectoryArray().add(newTask);
+						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), newTask.getTimeAdded()});
 					}
 					//put task in list to be displayed on main menu
 					

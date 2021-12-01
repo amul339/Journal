@@ -43,7 +43,8 @@ public class DeleteTasksUI {
 		buttonClrCont.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//clear all tasks
-				Menu.getListModelTasks().removeAllElements();
+				menuTable.getTaskDirectoryArray().clear();
+				menuTable.getTableModelTasks().setRowCount(0);
 				frameClrAllTask.dispose();
 			}
 		});
