@@ -3,6 +3,7 @@ package journal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,6 +16,7 @@ public class DeleteTasksUI {
 	private JPanel panelClrAllTask;
 	private JButton buttonClrCont;
 	private JLabel labelClrWarning;
+	private ImageIcon icon;
 	
 	public DeleteTasksUI() {
 		
@@ -22,6 +24,7 @@ public class DeleteTasksUI {
 		this.buttonClrCont = new JButton("Continue");
 		this.labelClrWarning = new JLabel("<html>This will clear all active to-do tasks. <br/> Are you sure you want to continue?<html>");
 		this.panelClrAllTask = new JPanel();
+		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
 		
 		//configure bounds for 'clear all tasks' panel components
 		labelClrWarning.setVerticalAlignment(SwingConstants.TOP);
@@ -31,6 +34,7 @@ public class DeleteTasksUI {
 		//configure 'clear all tasks' frame and add panel
 		frameClrAllTask.setSize(300,140);
 		frameClrAllTask.setResizable(false);
+		frameClrAllTask.setIconImage(icon.getImage());
 		frameClrAllTask.add(panelClrAllTask);
 		frameClrAllTask.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import journal.Task.Type;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -21,6 +22,7 @@ public class CreateTaskUI {
 	private JTextField txtTask;
 	private JLabel labeltxtTask, labelTaskType;
 	private JButton buttonTaskOk;
+	private ImageIcon icon;
 	
 	public CreateTaskUI() {
 		this.frameCreateTask = new JFrame("Create Task");
@@ -31,6 +33,7 @@ public class CreateTaskUI {
 		this.labeltxtTask = new JLabel("Describe your task in the box below:");
 		this.labelTaskType = new JLabel("Task Type:");
 		this.buttonTaskOk = new JButton("Create");
+		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
 		
 		
 		//configure bounds for create_task panel components
@@ -48,6 +51,7 @@ public class CreateTaskUI {
 		//configure 'create task' frame and add panel
 		frameCreateTask.setSize(500,200);
 		frameCreateTask.setResizable(false);
+		frameCreateTask.setIconImage(icon.getImage());
 		frameCreateTask.add(panelCreateTask);
 		frameCreateTask.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
@@ -89,12 +93,13 @@ public class CreateTaskUI {
 					if(chkboxCritical.isSelected()) {
 						Task newTask = new Task(currenttaskType, true, currentTaskDescription);
 						menuTable.getTaskDirectoryArray().add(newTask);
-						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), newTask.getTimeAdded()});
+						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), Menu.localDateTimeFormatter(newTask.getDueLocalDateTime()), Menu.localDateTimeFormatter(newTask.getAddedLocalDateTime())});
 					}
 					else {
 						Task newTask = new Task(currenttaskType, false, currentTaskDescription);
 						menuTable.getTaskDirectoryArray().add(newTask);
-						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), newTask.getTimeAdded()});
+						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), Menu.localDateTimeFormatter(newTask.getDueLocalDateTime()), Menu.localDateTimeFormatter(newTask.getAddedLocalDateTime())});
+
 					}
 					//put task in list to be displayed on main menu
 					

@@ -2,6 +2,7 @@ package journal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ public class Menu {
 	private JMenu menuFile, menuUtilities, menuHelp;
 	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad;
 	private menuTable menuTable;
+	private ImageIcon icon;
 	
 	
 	
@@ -26,7 +28,7 @@ public class Menu {
 		
 		//assign frames
 		this.frameMain = new JFrame("Journal");
-		
+		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
 		
 		//assignment tool-bar and menu items
 		this.menuBar = new JMenuBar();
@@ -39,7 +41,7 @@ public class Menu {
 		this.mItemClrAllTask = new JMenuItem("Clear All Tasks");
 		
 		//assign panels and other garbage
-		this.timeLabel = new JLabel(getDateTime(), JLabel.CENTER);
+		this.timeLabel = new JLabel(localDateTimeFormatter(getLocalDateTime()), JLabel.CENTER);
 		this.timeMsg  = new JLabel("System time:");
 		this.panelMain = new JPanel();
 		this.buttonPLH = new JButton("PLH");
@@ -71,6 +73,7 @@ public class Menu {
 		frameMain.setSize(500,500);
 		frameMain.setResizable(false);
 		frameMain.setJMenuBar(menuBar);
+		frameMain.setIconImage(icon.getImage());
 		frameMain.add(panelMain);
 		
 		//set layout
@@ -119,19 +122,17 @@ public class Menu {
 		
 	}
 	
-	
-	//returns current LocalDateTime in string format.
-	public static String getDateTime() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-		String dateTime = java.time.LocalDateTime.now().format(formatter);
-			
-		return dateTime;
-			
+	public static LocalDateTime getLocalDateTime() {
+		return java.time.LocalDateTime.now();
 	}
-		
+	//returns current LocalDateTime in string format.
+	public static String localDateTimeFormatter(LocalDateTime localDateTime) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		return localDateTime.format(formatter);
+	}
 		//update timeLabel with current time.
 	private void updateTimeLabel() {
-		this.timeLabel.setText(getDateTime());
+		this.timeLabel.setText(localDateTimeFormatter(getLocalDateTime()));
 	}
 		
 	public JLabel getTimeLabel() {

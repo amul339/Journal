@@ -32,9 +32,10 @@ public class menuTable {
 		tableTasks.setCellSelectionEnabled(false);
 		
 		tableModelTasks.addColumn("Task");
-		tableModelTasks.addColumn("Date");
+		tableModelTasks.addColumn("Due");
+		tableModelTasks.addColumn("Date Created");
 		
-		scrollTasks.setBounds(12, 50, 225, 360);
+		scrollTasks.setBounds(12, 50, 360, 360);
 	}
 	
 	public static DefaultTableModel getTableModelTasks() {
