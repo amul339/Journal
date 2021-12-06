@@ -5,13 +5,16 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -91,6 +94,7 @@ public class CreateTaskUI {
 				boolean isCritical = false;
 				
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+					
 				
 				if (!currentTaskDescription.isBlank()) {
 					
@@ -111,7 +115,14 @@ public class CreateTaskUI {
 							timeDue = null;
 							break;
 						case"<Custom>":
+							try {
 							timeDue = LocalDateTime.parse(txtDue.getText(), formatter);
+							}
+							catch(DateTimeParseException exception) {
+								txtDue.setText("");
+								JOptionPane.showMessageDialog(frameCreateTask, "Incorrect custom date format, please try again.");
+								return;
+							}
 							break;
 						default:
 							timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
@@ -123,7 +134,6 @@ public class CreateTaskUI {
 					
 					//refresh table
 					menuTable.updateTable();
-					
 					frameCreateTask.dispose();
 					
 				}
@@ -145,6 +155,7 @@ public class CreateTaskUI {
 				else {
 					labeltxtCustom.setEnabled(false);
 					txtDue.setEnabled(false);
+					txtDue.setText("");
 				}
 			}
 			
