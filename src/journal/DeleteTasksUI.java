@@ -42,6 +42,7 @@ public class DeleteTasksUI {
 		panelClrAllTask.add(labelClrWarning);
 		panelClrAllTask.add(buttonClrCont);
 		
+		frameClrAllTask.setLocationRelativeTo(null);
 		frameClrAllTask.setVisible(true);
 		
 		buttonClrCont.addActionListener(new ActionListener() {

@@ -1,8 +1,10 @@
 package journal;
 
 import java.awt.event.ActionEvent;
-import journal.Task.Type;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,9 +21,9 @@ public class CreateTaskUI {
 	private JPanel panelCreateTask;
 	private JCheckBox chkboxCritical;
 	private JComboBox<String> comboTaskType;
-	private JTextField txtTask;
-	private JLabel labeltxtTask, labelTaskType;
-	private JButton buttonTaskOk;
+	private JTextField txtTask, txtDue;
+	private JLabel labeltxtTask, labelTaskType, labeltxtCustom;
+	private JButton buttonTaskOk, buttonTaskCancel;
 	private ImageIcon icon;
 	
 	public CreateTaskUI() {
@@ -30,26 +32,34 @@ public class CreateTaskUI {
 		this.chkboxCritical = new JCheckBox("Critical");
 		this.comboTaskType = new JComboBox<String>();
 		this.txtTask = new JTextField();
+		this.txtDue = new JTextField();
+		this.labeltxtCustom = new JLabel("Custom Due Date (dd-MM-yyyy HH:mm:ss)");
 		this.labeltxtTask = new JLabel("Describe your task in the box below:");
 		this.labelTaskType = new JLabel("Task Type:");
 		this.buttonTaskOk = new JButton("Create");
+		this.buttonTaskCancel = new JButton("Cancel");
 		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
 		
 		
 		//configure bounds for create_task panel components
 		labeltxtTask.setBounds(10, 10, 250, 20);
 		txtTask.setBounds(10, 35, 300, 20);
-		comboTaskType.addItem("End of Day");
-		comboTaskType.addItem("End of Week");
+		txtDue.setBounds(10, 140, 150, 20);
+		labeltxtCustom.setBounds(10, 115, 250, 20);
+		comboTaskType.addItem("Midnight");
+		comboTaskType.addItem("7 Days");
 		comboTaskType.addItem("No Expiration");
+		comboTaskType.addItem("<Custom>");
 		
 		labelTaskType.setBounds(10, 60, 150, 20);
 		comboTaskType.setBounds(10, 85, 100, 20);
-		chkboxCritical.setBounds(150, 85 , 100, 20);
-		buttonTaskOk.setBounds(365, 40, 80, 25);
-		
+		chkboxCritical.setBounds(160, 85 , 100, 20);
+		buttonTaskOk.setBounds(365, 35, 80, 40);
+		buttonTaskCancel.setBounds(365, 90, 80, 25);
+		txtDue.setEnabled(false);
+		labeltxtCustom.setEnabled(false);
 		//configure 'create task' frame and add panel
-		frameCreateTask.setSize(500,200);
+		frameCreateTask.setSize(500,220);
 		frameCreateTask.setResizable(false);
 		frameCreateTask.setIconImage(icon.getImage());
 		frameCreateTask.add(panelCreateTask);
@@ -61,10 +71,15 @@ public class CreateTaskUI {
 		panelCreateTask.add(comboTaskType);
 		panelCreateTask.add(chkboxCritical);
 		panelCreateTask.add(txtTask);
+		panelCreateTask.add(txtDue);
+		panelCreateTask.add(labeltxtCustom);
 		panelCreateTask.add(labeltxtTask);
 		panelCreateTask.add(labelTaskType);
 		panelCreateTask.add(buttonTaskOk);
+		panelCreateTask.add(buttonTaskCancel);
 		
+		
+		frameCreateTask.setLocationRelativeTo(null);
 		frameCreateTask.setVisible(true);
 				
 		buttonTaskOk.addActionListener(new ActionListener() {
@@ -72,43 +87,72 @@ public class CreateTaskUI {
 				//create task instance if textbox has content, get input from textbox and additional settings.
 				
 				final String currentTaskDescription = txtTask.getText();
-				Type currenttaskType;
+				LocalDateTime timeDue;
+				boolean isCritical = false;
+				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 				
 				if (!currentTaskDescription.isBlank()) {
-				
+					
+					
+					if (chkboxCritical.isSelected()) {
+						isCritical = true;
+					}
+					
 					switch(comboTaskType.getSelectedItem().toString()) {
-						case"End of Day":
-							currenttaskType = Task.Type.EOD;
-						case"End of Week":
-							currenttaskType = Task.Type.EOW;
+					
+						case"Midnight":
+							timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
+							break;
+						case"7 Days":
+							timeDue = LocalDateTime.of(java.time.LocalDate.now().plusDays(7), java.time.LocalTime.now());
 							break;
 						case"No Expiration":
-							currenttaskType = Task.Type.INDEFINITE;
+							timeDue = null;
+							break;
+						case"<Custom>":
+							timeDue = LocalDateTime.parse(txtDue.getText(), formatter);
 							break;
 						default:
-							currenttaskType = Task.Type.EOD;
+							timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
+							break;
 					}
 					
-					
-					if(chkboxCritical.isSelected()) {
-						Task newTask = new Task(currenttaskType, true, currentTaskDescription);
-						menuTable.getTaskDirectoryArray().add(newTask);
-						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), Menu.localDateTimeFormatter(newTask.getDueLocalDateTime()), Menu.localDateTimeFormatter(newTask.getAddedLocalDateTime())});
-					}
-					else {
-						Task newTask = new Task(currenttaskType, false, currentTaskDescription);
-						menuTable.getTaskDirectoryArray().add(newTask);
-						menuTable.getTableModelTasks().addRow(new String[] {newTask.toString(), Menu.localDateTimeFormatter(newTask.getDueLocalDateTime()), Menu.localDateTimeFormatter(newTask.getAddedLocalDateTime())});
-
-					}
+					new Task(timeDue, isCritical, currentTaskDescription);
 					//put task in list to be displayed on main menu
 					
-					//refresh main menu list 
-					
+					//refresh table
+					menuTable.updateTable();
 					
 					frameCreateTask.dispose();
 					
 				}
+			}
+			
+		});
+		
+		
+		comboTaskType.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
+			public void actionPerformed(ActionEvent e) {
+				JComboBox<String> comboTaskType = (JComboBox<String>) e.getSource();
+				
+				Object selected = comboTaskType.getSelectedItem();
+				if (selected.toString().equals("<Custom>")) {
+					labeltxtCustom.setEnabled(true);
+					txtDue.setEnabled(true);
+				}
+				else {
+					labeltxtCustom.setEnabled(false);
+					txtDue.setEnabled(false);
+				}
+			}
+			
+		});
+		
+		buttonTaskCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frameCreateTask.dispose();
 			}
 			
 		});

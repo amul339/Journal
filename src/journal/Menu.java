@@ -16,7 +16,7 @@ public class Menu {
 	private JButton buttonPLH, buttonPLH2;
 	private JMenuBar menuBar;
 	private JMenu menuFile, menuUtilities, menuHelp;
-	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad;
+	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad, mItemExit;
 	private menuTable menuTable;
 	private ImageIcon icon;
 	
@@ -37,6 +37,7 @@ public class Menu {
 		this.menuUtilities = new JMenu("Utilities");
 		this.mItemAbout = new JMenuItem("About");
 		this.mItemLoad = new JMenuItem("Load");
+		this.mItemExit = new JMenuItem("Exit");
 		this.mItemCreateTask = new JMenuItem("Create Task");
 		this.mItemClrAllTask = new JMenuItem("Clear All Tasks");
 		
@@ -53,6 +54,7 @@ public class Menu {
 		menuFile.add(mItemLoad);
 		menuFile.add(mItemCreateTask);
 		menuFile.add(mItemClrAllTask);
+		menuFile.add(mItemExit);
 		menuBar.add(menuFile);
 		menuBar.add(menuUtilities);
 		menuBar.add(menuHelp);
@@ -105,6 +107,13 @@ public class Menu {
 			}
 		});
 		
+		mItemExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		
+		frameMain.setLocationRelativeTo(null);
 		frameMain.setVisible(true);
 		
 		/////TIMER FOR CLOCK
@@ -127,8 +136,14 @@ public class Menu {
 	}
 	//returns current LocalDateTime in string format.
 	public static String localDateTimeFormatter(LocalDateTime localDateTime) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-		return localDateTime.format(formatter);
+		
+		if (localDateTime != null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+			return localDateTime.format(formatter);
+		}
+		else {
+			return "-";
+		}
 	}
 		//update timeLabel with current time.
 	private void updateTimeLabel() {

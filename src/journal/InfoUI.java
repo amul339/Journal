@@ -18,7 +18,7 @@ public class InfoUI {
 		//assign sub-menu labels and components
 		this.frameAbout = new JFrame("About");
 		this.labelAbout = new JLabel("Journal in-dev");
-		this.labelAuthor = new JLabel("Created by Anthony Mulder");
+		this.labelAuthor = new JLabel("Created by Anthony Mulder 2021");
 		this.panelAbout = new JPanel();
 		this.icon = new ImageIcon(getClass().getResource("/question.png"));
 		
@@ -39,7 +39,7 @@ public class InfoUI {
 		panelAbout.add(labelAbout);
 		panelAbout.add(labelAuthor);
 		
-		
+		frameAbout.setLocationRelativeTo(null);
 		frameAbout.setVisible(true);
 	}
 }

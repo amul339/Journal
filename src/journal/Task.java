@@ -1,46 +1,22 @@
 package journal;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Task {
 	
-	private Type taskType;
 	private boolean isCritical;
 	private String task;
 	private LocalDateTime timeAdded, timeDue;
 	
-	enum Type {
-		EOD, //end of day
-		EOW, //end of week
-		INDEFINITE //no expiration
-	}
 	
-	
-	public Task(Type taskType, boolean isCritical, String task) {
-		this.taskType = taskType;
+	public Task(LocalDateTime timeDue, boolean isCritical, String task) {
+		this.timeDue= timeDue;
 		this.task = task;
 		this.isCritical = isCritical;
 		this.timeAdded = Menu.getLocalDateTime();
 		
-		switch(taskType) {
-		case EOD:
-			this.timeDue = LocalDateTime.of(timeAdded.toLocalDate(), LocalTime.of(23,59,59));
-			break;
-		case EOW:
-			this.timeDue = LocalDateTime.of(timeAdded.plusDays(7).toLocalDate(), LocalTime.of(23, 59, 59));
-			break;
-		case INDEFINITE:
-			this.timeDue = null;
-			break;
-		default:
-			this.timeDue = LocalDateTime.of(timeAdded.toLocalDate(), LocalTime.of(23,59,59));
-	}
+		menuTable.getTaskDirectoryArray().add(this);
 		
-	}
-	
-	public Type getTaskType() {
-		return this.taskType;
 	}
 	
 	public boolean checkIfCritical() {

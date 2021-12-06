@@ -38,6 +38,16 @@ public class menuTable {
 		scrollTasks.setBounds(12, 50, 360, 360);
 	}
 	
+	public static void updateTable() {
+		//reset table contents
+		getTableModelTasks().setRowCount(0);
+		
+		// for each task in task directory, update table with latest data in array.
+		for (Task task : getTaskDirectoryArray()) {
+			menuTable.getTableModelTasks().addRow(new String[] {task.toString(), Menu.localDateTimeFormatter(task.getDueLocalDateTime()), Menu.localDateTimeFormatter(task.getAddedLocalDateTime())});
+		}
+	}
+	
 	public static DefaultTableModel getTableModelTasks() {
 		return tableModelTasks;
 	}

@@ -18,7 +18,9 @@ public class SettingsUI {
 		frameSettings.setResizable(false);
 		frameSettings.add(panelSettings);
 		frameSettings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				
+		
+		
+		frameSettings.setLocationRelativeTo(null);
 		frameSettings.setVisible(true);
 
 	}
