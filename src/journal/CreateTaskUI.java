@@ -120,20 +120,25 @@ public class CreateTaskUI {
 							}
 							catch(DateTimeParseException exception) {
 								txtDue.setText("");
-								JOptionPane.showMessageDialog(frameCreateTask, "Incorrect custom date format, please try again.");
+								JOptionPane.showMessageDialog(frameCreateTask, "Incorrect custom date format, please try again.\nExact format of 'dd-MM-yyyy HH:mm:ss' is required.");
 								return;
 							}
+							
+							if (timeDue.isBefore(java.time.LocalDateTime.now())) {
+								JOptionPane.showMessageDialog(frameCreateTask, "Please enter a valid future date");
+							}
+							
+							
 							break;
 						default:
 							timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
 							break;
 					}
 					
-					new Task(timeDue, isCritical, currentTaskDescription);
+					menuTable.getTableModel().add(new Task(timeDue, isCritical, currentTaskDescription));
 					//put task in list to be displayed on main menu
 					
 					//refresh table
-					menuTable.updateTable();
 					frameCreateTask.dispose();
 					
 				}

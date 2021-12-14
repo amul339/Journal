@@ -15,8 +15,6 @@ public class Task {
 		this.isCritical = isCritical;
 		this.timeAdded = Menu.getLocalDateTime();
 		
-		menuTable.getTaskDirectoryArray().add(this);
-		
 	}
 	
 	public boolean checkIfCritical() {

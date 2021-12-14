@@ -13,7 +13,7 @@ public class Menu {
 	private JFrame frameMain;
 	private Timer timer;
 	private JPanel panelMain;
-	private JButton buttonPLH, buttonPLH2;
+	private JButton buttonDelete, buttonPLH2;
 	private JMenuBar menuBar;
 	private JMenu menuFile, menuUtilities, menuHelp;
 	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad, mItemExit;
@@ -45,7 +45,7 @@ public class Menu {
 		this.timeLabel = new JLabel(localDateTimeFormatter(getLocalDateTime()), JLabel.CENTER);
 		this.timeMsg  = new JLabel("System time:");
 		this.panelMain = new JPanel();
-		this.buttonPLH = new JButton("PLH");
+		this.buttonDelete = new JButton("Delete");
 		this.buttonPLH2 = new JButton("PLH2");
 		
 		this.menuTable = new menuTable();
@@ -62,11 +62,11 @@ public class Menu {
 		//configure bounds for main panel components
 		timeLabel.setBounds(-30, -15, 200, 100);
 		timeMsg.setBounds(12,5,100,20);
-		buttonPLH.setBounds(390,10,80,25);
+		buttonDelete.setBounds(390,10,80,25);
 		buttonPLH2.setBounds(390,50,80,25);
 		menuUtilities.setEnabled(false);
 		mItemLoad.setEnabled(false);
-		buttonPLH.setEnabled(false);
+		buttonDelete.setEnabled(false);
 		buttonPLH2.setEnabled(false);
 		
 		//configure main frame and add panel
@@ -84,7 +84,7 @@ public class Menu {
 		//add components to 'main' panel
 		panelMain.add(timeLabel);
 		panelMain.add(timeMsg);
-		panelMain.add(buttonPLH);
+		panelMain.add(buttonDelete);
 		panelMain.add(buttonPLH2);
 		panelMain.add(journal.menuTable.getScrollTasks());
 		
@@ -110,6 +110,16 @@ public class Menu {
 		mItemExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
+			}
+		});
+		
+		buttonDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = menuTable.getSelectedRow();
+				
+				if (selectedRow != -1) {
+					menuTable.getTableModel().removeRow(selectedRow);
+				}
 			}
 		});
 		
@@ -156,5 +166,9 @@ public class Menu {
 	
 	public JFrame getMenuFrame() {
 		return this.frameMain;
+	}
+	
+	public JButton getDeleteButton() {
+		return buttonDelete;
 	}
 }
