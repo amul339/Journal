@@ -1,18 +1,22 @@
 package journal;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class InfoUI {
+	
+	private static final int PORT = 7004;
+	
 	private JLabel labelAbout, labelAuthor;
 	private JPanel panelAbout;
 	private JFrame frameAbout;
 	private ImageIcon icon;
 	
-	
-
 	
 	public InfoUI() {
 		//assign sub-menu labels and components
@@ -41,5 +45,19 @@ public class InfoUI {
 		
 		frameAbout.setLocationRelativeTo(null);
 		frameAbout.setVisible(true);
+		
+		frameAbout.addWindowListener(new WindowAdapter() {
+			@Override
+		    public void windowClosing(WindowEvent e) {
+		        // do your work here
+		        InstanceHandler.closePort(InfoUI.getPort());
+		    }         
+		});
+	}
+	
+	
+	
+	public static int getPort() {
+		return PORT;
 	}
 }

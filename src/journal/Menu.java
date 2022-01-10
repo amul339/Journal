@@ -9,6 +9,9 @@ import javax.swing.*;
 
 public class Menu {
 	
+	private static final int PORT = 7000;
+	private static menuTable menuTable = new menuTable();
+	
 	private JLabel timeMsg, timeLabel;
 	private JFrame frameMain;
 	private Timer timer;
@@ -17,12 +20,7 @@ public class Menu {
 	private JMenuBar menuBar;
 	private JMenu menuFile, menuUtilities, menuHelp;
 	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad, mItemExit;
-	private menuTable menuTable;
 	private ImageIcon icon;
-	
-	
-	
-	
 	
 	public Menu() {
 		
@@ -47,8 +45,6 @@ public class Menu {
 		this.panelMain = new JPanel();
 		this.buttonDelete = new JButton("Delete");
 		this.buttonPLH2 = new JButton("PLH2");
-		
-		this.menuTable = new menuTable();
 
 		menuHelp.add(mItemAbout);
 		menuFile.add(mItemLoad);
@@ -86,24 +82,31 @@ public class Menu {
 		panelMain.add(timeMsg);
 		panelMain.add(buttonDelete);
 		panelMain.add(buttonPLH2);
-		panelMain.add(journal.menuTable.getScrollTasks());
+		panelMain.add(menuTable.getScrollTasks());
 		
 		
 		mItemAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new InfoUI();
+				if (InstanceHandler.checkPort(InfoUI.getPort())) {
+					new InfoUI();
+				}
 			}
 		});
 		
 		mItemCreateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new CreateTaskUI();
+				
+				if (InstanceHandler.checkPort(CreateTaskUI.getPort())) {
+					new CreateTaskUI();
+				}
 			}
 		});
 		
 		mItemClrAllTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new DeleteTasksUI();
+				if (InstanceHandler.checkPort(DeleteTasksUI.getPort())) {
+					new DeleteTasksUI();
+				}
 			}
 		});
 		
@@ -113,12 +116,14 @@ public class Menu {
 			}
 		});
 		
+		
 		buttonDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = menuTable.getSelectedRow();
 				
 				if (selectedRow != -1) {
 					menuTable.getTableModel().removeRow(selectedRow);
+					getDeleteButton().setEnabled(false);
 				}
 			}
 		});
@@ -169,6 +174,15 @@ public class Menu {
 	}
 	
 	public JButton getDeleteButton() {
-		return buttonDelete;
+		return this.buttonDelete;
 	}
+	
+	public static menuTable getMenuTable() {
+		return menuTable;
+	}
+	
+	public static int getPort() {
+		return PORT;
+	}
+	
 }

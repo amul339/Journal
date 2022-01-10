@@ -2,6 +2,8 @@ package journal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +13,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,7 +30,11 @@ public class CreateTaskUI {
 	private JButton buttonTaskOk, buttonTaskCancel;
 	private ImageIcon icon;
 	
+	private static final int PORT = 7001;
+		
 	public CreateTaskUI() {
+		
+		
 		this.frameCreateTask = new JFrame("Create Task");
 		this.panelCreateTask = new JPanel();
 		this.chkboxCritical = new JCheckBox("Critical");
@@ -135,7 +140,7 @@ public class CreateTaskUI {
 							break;
 					}
 					
-					menuTable.getTableModel().add(new Task(timeDue, isCritical, currentTaskDescription));
+					Menu.getMenuTable().getTableModel().add(new Task(timeDue, isCritical, currentTaskDescription));
 					//put task in list to be displayed on main menu
 					
 					//refresh table
@@ -169,9 +174,22 @@ public class CreateTaskUI {
 		buttonTaskCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frameCreateTask.dispose();
+				InstanceHandler.closePort(CreateTaskUI.getPort());
 			}
 			
 		});
 		
+		frameCreateTask.addWindowListener(new WindowAdapter() {
+			@Override
+		    public void windowClosing(WindowEvent e) {
+		        // do your work here
+		        InstanceHandler.closePort(CreateTaskUI.getPort());
+		    }         
+		});
+		
+	}
+	
+	public static int getPort() {
+		return PORT;
 	}
 }

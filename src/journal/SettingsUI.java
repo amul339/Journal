@@ -8,6 +8,8 @@ public class SettingsUI {
 	private JFrame frameSettings;
 	private JPanel panelSettings;
 	
+	private static final int PORT = 7003;
+	
 	public SettingsUI() {
 		this.frameSettings = new JFrame("Settings");
 		this.panelSettings = new JPanel();

@@ -2,6 +2,8 @@ package journal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,6 +19,8 @@ public class DeleteTasksUI {
 	private JButton buttonClrCont;
 	private JLabel labelClrWarning;
 	private ImageIcon icon;
+	
+	private static final int PORT = 7002;
 	
 	public DeleteTasksUI() {
 		
@@ -48,11 +52,23 @@ public class DeleteTasksUI {
 		buttonClrCont.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//clear all tasks
-				menuTable.getTableModel().removeAll();
+				//Main.getMenu().getMenuTable().getTableModel().removeAll();
 				frameClrAllTask.dispose();
 			}
 		});
 		
+		frameClrAllTask.addWindowListener(new WindowAdapter() {
+			@Override
+		    public void windowClosing(WindowEvent e) {
+		        // do your work here
+		        InstanceHandler.closePort(DeleteTasksUI.getPort());
+		    }         
+		});
+		
+	}
+	
+	public static int getPort() {
+		return PORT;
 	}
 
 }

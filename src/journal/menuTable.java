@@ -1,10 +1,7 @@
 package journal;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,20 +9,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class menuTable {
 	
-	private static JTable tableTasks = new JTable();
-	private static JScrollPane scrollTasks = new JScrollPane(tableTasks);
-	private static CustomTableModel customTableModel = new CustomTableModel();
-	private static TableRowSorter<CustomTableModel> sorter = new TableRowSorter<CustomTableModel>(customTableModel);
+	private JTable tableTasks = new JTable();
+	private JScrollPane scrollTasks = new JScrollPane(tableTasks);
+	private CustomTableModel customTableModel = new CustomTableModel();
+	private TableRowSorter<CustomTableModel> sorter = new TableRowSorter<CustomTableModel>(customTableModel);
 	
-	private static int selectedRow = -1;
+	private int selectedRow = -1;
+	
+	private menuTable menuTable = this;
 	
 	public menuTable() {
 		
@@ -45,6 +41,8 @@ public class menuTable {
 		
 		scrollTasks.setBounds(12, 50, 360, 360);
 		
+		
+		
 		tableTasks.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mousePressed(MouseEvent e) {	
@@ -62,26 +60,30 @@ public class menuTable {
 		    	  selectedRow = -1;
 		      }
 		      
-		      /*
+		      
 		      if (selectedRow != -1) {
 		    	  //enable delete button
+		    	  Main.getMenu().getDeleteButton().setEnabled(true);
 		      }
-		      */
+		      else {
+		    	  Main.getMenu().getDeleteButton().setEnabled(false);
+		      }
+		      
 		      
 		    }
 		  	});
 	}
 	
-	public static CustomTableModel getTableModel() {
-		return customTableModel;
+	public CustomTableModel getTableModel() {
+		return this.customTableModel;
 	}
 	
-	public static JScrollPane getScrollTasks() {
-		return scrollTasks;
+	public JScrollPane getScrollTasks() {
+		return this.scrollTasks;
 	}
 	
-	public static int getSelectedRow() {
-		return selectedRow;
+	public int getSelectedRow() {
+		return this.selectedRow;
 	}
 	
 }
