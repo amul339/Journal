@@ -169,5 +169,9 @@ class CustomTableModel extends AbstractTableModel {
 		    public boolean isCellEditable(int row, int col) {
 		       return false;
 		    }
+		    
+		    public ArrayList<Task> getData() {
+		    	return this.tasks;
+		    }
 
 }

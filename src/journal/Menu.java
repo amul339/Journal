@@ -2,6 +2,8 @@ package journal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -11,6 +13,7 @@ public class Menu {
 	
 	private static final int PORT = 7000;
 	private static menuTable menuTable = new menuTable();
+	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
 	private JLabel timeMsg, timeLabel;
 	private JFrame frameMain;
@@ -61,7 +64,7 @@ public class Menu {
 		buttonDelete.setBounds(390,10,80,25);
 		buttonPLH2.setBounds(390,50,80,25);
 		menuUtilities.setEnabled(false);
-		mItemLoad.setEnabled(false);
+		mItemLoad.setEnabled(true);
 		buttonDelete.setEnabled(false);
 		buttonPLH2.setEnabled(false);
 		
@@ -128,6 +131,40 @@ public class Menu {
 			}
 		});
 		
+		mItemLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int dataLoadCount = 0; // counts how many tasks have been loaded
+				System.out.println("Loading data...");
+				
+				//should probably clear tasks here prior to loading...
+				Menu.deleteAllTasks();
+				
+				try {
+					BufferedReader reader = new BufferedReader(new FileReader("resources/savedJData.txt"));
+					String rline = reader.readLine();
+					int dataCount = 0;
+						
+					while(!rline.equals("END")) {
+					
+					
+						String[] data = rline.split("\\^");
+						//timeDue, timeAdded, isCritical, task description
+						Menu.loadTaskFromFile(LocalDateTime.parse(data[0], formatter),LocalDateTime.parse(data[1], formatter),Boolean.parseBoolean(data[2]),data[3]);
+						rline = reader.readLine();
+						dataLoadCount++;
+					
+					}
+					
+					System.out.println("Successfully loaded data");
+				}
+				catch(Exception ex) {
+					System.out.print(ex);
+					System.out.println("Failed to load data on file line " + dataLoadCount + ", possibly corrupt?");
+				}
+				
+			}
+		});
+		
 		frameMain.setLocationRelativeTo(null);
 		frameMain.setVisible(true);
 		
@@ -153,7 +190,6 @@ public class Menu {
 	public static String localDateTimeFormatter(LocalDateTime localDateTime) {
 		
 		if (localDateTime != null) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 			return localDateTime.format(formatter);
 		}
 		else {
@@ -183,6 +219,17 @@ public class Menu {
 	
 	public static int getPort() {
 		return PORT;
+	}
+	
+	public static void deleteAllTasks() {
+		getMenuTable().getTableModel().removeAll();
+	}
+	
+	public static void createTask(LocalDateTime timeDue, boolean isCritical, String task) {
+		getMenuTable().getTableModel().add(new Task(timeDue, isCritical, task));
+	}
+	public static void loadTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
+		getMenuTable().getTableModel().add(new Task(timeDue, timeAdded, isCritical, task));
 	}
 	
 }

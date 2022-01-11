@@ -140,11 +140,10 @@ public class CreateTaskUI {
 							break;
 					}
 					
-					Menu.getMenuTable().getTableModel().add(new Task(timeDue, isCritical, currentTaskDescription));
+					Menu.createTask(timeDue, isCritical, currentTaskDescription);
 					//put task in list to be displayed on main menu
-					
-					//refresh table
 					frameCreateTask.dispose();
+					InstanceHandler.closePort(CreateTaskUI.getPort());
 					
 				}
 			}

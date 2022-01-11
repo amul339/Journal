@@ -17,6 +17,15 @@ public class Task {
 		
 	}
 	
+	
+	//alternate task constructor for loading data from 
+	public Task(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
+		this.timeDue = timeDue;
+		this.task = task;
+		this.isCritical = isCritical;
+		this.timeAdded = timeAdded;
+	}
+	
 	public boolean checkIfCritical() {
 		return this.isCritical;
 	}
