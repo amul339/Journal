@@ -35,6 +35,11 @@ public class CreateTaskUI {
 	public CreateTaskUI() {
 		
 		
+		//Local result variable generated from CreateTaskUI to be picked up by JournalModels after sending message to Main to create task instance.
+		
+		
+		
+		
 		this.frameCreateTask = new JFrame("Create Task");
 		this.panelCreateTask = new JPanel();
 		this.chkboxCritical = new JCheckBox("Critical");
@@ -86,7 +91,6 @@ public class CreateTaskUI {
 		panelCreateTask.add(buttonTaskOk);
 		panelCreateTask.add(buttonTaskCancel);
 		
-		
 		frameCreateTask.setLocationRelativeTo(null);
 		frameCreateTask.setVisible(true);
 				
@@ -98,8 +102,7 @@ public class CreateTaskUI {
 				LocalDateTime timeDue;
 				boolean isCritical = false;
 				
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-					
+				DateTimeFormatter formatter = JournalController.getDateTimeFormatter();
 				
 				if (!currentTaskDescription.isBlank()) {
 					
@@ -140,7 +143,7 @@ public class CreateTaskUI {
 							break;
 					}
 					
-					Menu.createTask(timeDue, isCritical, currentTaskDescription);
+					JournalController.createTask(timeDue, isCritical, currentTaskDescription);
 					//put task in list to be displayed on main menu
 					frameCreateTask.dispose();
 					InstanceHandler.closePort(CreateTaskUI.getPort());

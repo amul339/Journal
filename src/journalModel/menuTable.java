@@ -1,4 +1,4 @@
-package journal;
+package journalModel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,6 +12,8 @@ import javax.swing.SortOrder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
+import journal.JournalController;
+
 public class menuTable {
 	
 	private JTable tableTasks = new JTable();
@@ -20,8 +22,6 @@ public class menuTable {
 	private TableRowSorter<CustomTableModel> sorter = new TableRowSorter<CustomTableModel>(customTableModel);
 	
 	private int selectedRow = -1;
-	
-	private menuTable menuTable = this;
 	
 	public menuTable() {
 		
@@ -63,16 +63,17 @@ public class menuTable {
 		      
 		      if (selectedRow != -1) {
 		    	  //enable delete button
-		    	  Main.getMenu().enableDelete(true);
+		    	  JournalController.setDeleteButton(true);
 		      }
 		      else {
-		    	  Main.getMenu().enableDelete(false);
+		    	  JournalController.setDeleteButton(false);
 		      }
 		      
 		      
 		    }
 		  	});
 	}
+	
 	
 	public CustomTableModel getTableModel() {
 		return this.customTableModel;
@@ -133,9 +134,9 @@ class CustomTableModel extends AbstractTableModel {
 		    	case 0:
 		    		return task.toString();
 		    	case 1:
-		    		return Menu.localDateTimeFormatter(task.getDueLocalDateTime());
+		    		return JournalModels.localDateTimeFormatter(task.getDueLocalDateTime());
 		    	case 2:
-		    		return Menu.localDateTimeFormatter(task.getAddedLocalDateTime());
+		    		return JournalModels.localDateTimeFormatter(task.getAddedLocalDateTime());
 		    	}
 		    	return null;
 		    }

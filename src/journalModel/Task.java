@@ -1,6 +1,8 @@
-package journal;
+package journalModel;
 
 import java.time.LocalDateTime;
+
+import journal.JournalController;
 
 public class Task {
 	
@@ -13,7 +15,7 @@ public class Task {
 		this.timeDue= timeDue;
 		this.task = task;
 		this.isCritical = isCritical;
-		this.timeAdded = Main.getLocalDateTime();
+		this.timeAdded = JournalController.getLocalDateTime();
 		
 	}
 	

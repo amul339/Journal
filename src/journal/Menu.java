@@ -16,11 +16,10 @@ import java.util.List;
 
 import javax.swing.*;
 
+import journalModel.menuTable;
+
 public class Menu {
-	
 	private static final int PORT = 7000;
-	private static menuTable menuTable = new menuTable();
-	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
 	private JLabel timeMsg, timeLabel, labelStatus;
 	private JFrame frameMain;
@@ -37,7 +36,7 @@ public class Menu {
 		//assign frames
 		this.frameMain = new JFrame("Journal");
 		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
-		
+	
 		//assignment tool-bar and menu items
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
@@ -51,7 +50,7 @@ public class Menu {
 		this.mItemClrAllTask = new JMenuItem("Clear All Tasks");
 		
 		//assign panels and other garbage
-		this.timeLabel = new JLabel(localDateTimeFormatter(Main.getLocalDateTime()), JLabel.CENTER);
+		this.timeLabel = new JLabel(JournalController.localDateTimeFormatter(JournalController.getLocalDateTime()), JLabel.CENTER);
 		this.timeMsg  = new JLabel("System time:");
 		this.labelStatus = new JLabel("Testing");
 		this.panelMain = new JPanel();
@@ -97,7 +96,7 @@ public class Menu {
 		panelMain.add(timeMsg);
 		panelMain.add(buttonDelete);
 		panelMain.add(buttonPLH2);
-		panelMain.add(menuTable.getScrollTasks());
+		panelMain.add(JournalController.getMenuTable().getScrollTasks());
 		
 		
 		mItemAbout.addActionListener(new ActionListener() {
@@ -117,6 +116,7 @@ public class Menu {
 			}
 		});
 		
+		/*
 		mItemClrAllTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (InstanceHandler.checkPort(DeleteTasksUI.getPort())) {
@@ -124,7 +124,7 @@ public class Menu {
 				}
 			}
 		});
-		
+		*/
 		mItemExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -134,24 +134,19 @@ public class Menu {
 		
 		buttonDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int selectedRow = menuTable.getSelectedRow();
-				
-				if (selectedRow != -1) {
-					menuTable.getTableModel().removeRow(selectedRow);
-					getDeleteButton().setEnabled(false);
-				}
+				JournalController.removeSelectedRowFromModel();
 			}
 		});
 		
 		mItemLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Menu.loadSavedData();
+				JournalController.loadSavedData();
 			}
 		});
 		
 		mItemSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Menu.saveData();
+				JournalController.saveData();
 			}
 		});
 		
@@ -173,20 +168,9 @@ public class Menu {
 		
 	}
 	
-	
-	//returns current LocalDateTime in string format.
-	public static String localDateTimeFormatter(LocalDateTime localDateTime) {
-		
-		if (localDateTime != null) {
-			return localDateTime.format(formatter);
-		}
-		else {
-			return "-";
-		}
-	}
 		//update timeLabel with current time.
 	private void updateTimeLabel() {
-		this.timeLabel.setText(localDateTimeFormatter(Main.getLocalDateTime()));
+		this.timeLabel.setText(JournalController.localDateTimeFormatter(JournalController.getLocalDateTime()));
 	}
 	
 	private JButton getDeleteButton() {
@@ -202,102 +186,17 @@ public class Menu {
 		getDeleteButton().setEnabled(bool);
 	}
 	
-	public static menuTable getMenuTable() {
-		return menuTable;
-	}
-	
 	public static int getPort() {
 		return PORT;
 	}
 	
-	public static void deleteAllTasks() {
-		getMenuTable().getTableModel().removeAll();
-	}
 	
-	//Converts task data to strings. Used for saving task data to text.
-	public static String taskAttribToString(Task task) {
-		String taskDesc = task.toString();
-		String addedTime = Menu.localDateTimeFormatter(task.getAddedLocalDateTime());
-		String dueTime = Menu.localDateTimeFormatter(task.getDueLocalDateTime());
-		String isCritical = Boolean.toString(task.checkIfCritical());
-		
-		
-		return dueTime + "^" + addedTime + "^" + isCritical + "^" + taskDesc;
-	}
 	
-	public static void createTask(LocalDateTime timeDue, boolean isCritical, String task) {
-		getMenuTable().getTableModel().add(new Task(timeDue, isCritical, task));
-	}
-	public static void loadSingleTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
-		getMenuTable().getTableModel().add(new Task(timeDue, timeAdded, isCritical, task));
-	}
-	public static void loadSavedData() {
-		int dataLoadCount = 0; // counts how many tasks have been loaded
-		System.out.println("Loading data...");
-		
-		//should probably clear tasks here prior to loading...
-		Menu.deleteAllTasks();
-		
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("resources/savedJData.txt"));
-			String rline = reader.readLine();
-				
-			while(!rline.equals("END")) {
-			
-			
-				String[] data = rline.split("\\^");
-				//timeDue, timeAdded, isCritical, task description
-				Menu.loadSingleTaskFromFile(LocalDateTime.parse(data[0], formatter),LocalDateTime.parse(data[1], formatter),Boolean.parseBoolean(data[2]),data[3]);
-				rline = reader.readLine();
-				dataLoadCount++;
-			
-			}
-			
-			System.out.println("Successfully loaded data");
-		}
-		catch(Exception ex) {
-			System.out.println("Failed to load data on file line " + dataLoadCount + ", possibly corrupt?");
-		}
-		
-	}
 	
-	public static void saveData() {
-		// save each task and its data in text file format
-		try {
-			
-			ArrayList<String> strTableTasks = new ArrayList<String>();
-			ArrayList<Task> tableTasks = Menu.getMenuTable().getTableModel().getData();
-		
-			Path file = Paths.get("resources/savedJData.txt");
-			
-			
-			
-			// for each task, convert task to one big string with '^' separating task attributes.
-			//look at method 'taskAttribToString';
-			//store all task to string conversions in array
-			//finally write to file
-			for (Task task : tableTasks) {
-				
-				
-				strTableTasks.add(Menu.taskAttribToString(task));
-				
-				
-			}
-			
-			
-			//add indicator for EOF
-			strTableTasks.add("END");
-		
-			Files.write(file, strTableTasks, StandardCharsets.UTF_8);
-			
-			System.out.println("Successfully saved data");
-			
-		}
-		catch (Exception ex) {
-			System.out.println("Write error");
-			System.out.println(ex);
-		}
-	}
+	
+	
+	
+	
 
 	
 	
