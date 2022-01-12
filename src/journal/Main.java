@@ -1,9 +1,13 @@
 package journal;
 
+import java.time.LocalDateTime;
+
+import javax.swing.UIManager;
 
 public class Main {
 	
 	private static Menu menu = null;
+	
 	
 	public static void main(String[] args) {
 		
@@ -20,5 +24,7 @@ public class Main {
 	public static Menu getMenu() {
 		return menu;
 	}
-	
+	public static LocalDateTime getLocalDateTime() {
+		return java.time.LocalDateTime.now();
+	}
 }

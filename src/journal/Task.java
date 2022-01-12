@@ -13,7 +13,7 @@ public class Task {
 		this.timeDue= timeDue;
 		this.task = task;
 		this.isCritical = isCritical;
-		this.timeAdded = Menu.getLocalDateTime();
+		this.timeAdded = Main.getLocalDateTime();
 		
 	}
 	

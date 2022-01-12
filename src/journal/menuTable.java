@@ -63,10 +63,10 @@ public class menuTable {
 		      
 		      if (selectedRow != -1) {
 		    	  //enable delete button
-		    	  Main.getMenu().getDeleteButton().setEnabled(true);
+		    	  Main.getMenu().enableDelete(true);
 		      }
 		      else {
-		    	  Main.getMenu().getDeleteButton().setEnabled(false);
+		    	  Main.getMenu().enableDelete(false);
 		      }
 		      
 		      
