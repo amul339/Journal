@@ -7,9 +7,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+import journal.CreateTaskUI;
+import journal.InstanceHandler;
 import journal.JournalController;
 
 
@@ -18,6 +22,61 @@ public class JournalModels {
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
 	private static menuTable menuTable = new menuTable();
+	
+	protected static void createTaskCheck() {
+		//create task instance if text-box has content, get input from text-box and additional settings.
+		
+		final String currentTaskDescription = JournalController.getComponentTxtTaskString();
+		LocalDateTime timeDue;
+		boolean isCritical = false;
+		
+		DateTimeFormatter formatter = JournalController.getDateTimeFormatter();
+		
+		if (!currentTaskDescription.isBlank()) {
+			
+			
+			if (JournalController.isComponentChkBoxCriticalChecked()) {
+				isCritical = true;
+			}
+			
+			switch(JournalController.getComponentComboTaskTypeSelectedString()) {
+			
+				case"Midnight":
+					timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
+					break;
+				case"7 Days":
+					timeDue = LocalDateTime.of(java.time.LocalDate.now().plusDays(7), java.time.LocalTime.now());
+					break;
+				case"No Expiration":
+					timeDue = null;
+					break;
+				case"<Custom>":
+					try {
+					timeDue = LocalDateTime.parse(JournalController.getComponentTxtDueString(), formatter);
+					}
+					catch(DateTimeParseException exception) {
+						JournalController.setComponentTxtDueToBlank();
+						JournalController.showMessageIncorrectDateFormat();
+						return;
+					}
+					
+					if (timeDue.isBefore(java.time.LocalDateTime.now())) {
+						JournalController.showMessageEnterFutureDate();
+					}
+					
+					break;
+				default:
+					timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
+					break;
+			}
+			
+			JournalController.createTask(timeDue, isCritical, currentTaskDescription);
+			//put task in list to be displayed on main menu
+			JournalController.disposeCreateTaskUI();
+			InstanceHandler.closePort(CreateTaskUI.getPort());
+			
+		}
+	}
 	
 	protected static void removeSelectedRowFromModel() {
 		
@@ -71,6 +130,7 @@ public class JournalModels {
 		deleteAllTasks();
 		
 		try {
+			@SuppressWarnings("resource")
 			BufferedReader reader = new BufferedReader(new FileReader("resources/savedJData.txt"));
 			String rline = reader.readLine();
 				

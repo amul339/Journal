@@ -2,21 +2,9 @@ package journal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.*;
 
-import journalModel.menuTable;
 
 public class Menu {
 	private static final int PORT = 7000;
@@ -30,6 +18,8 @@ public class Menu {
 	private JMenu menuFile, menuUtilities, menuHelp;
 	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad, mItemSave, mItemExit;
 	private ImageIcon icon;
+	
+	private CreateTaskUI createtaskui;
 	
 	public Menu() {
 		
@@ -56,7 +46,8 @@ public class Menu {
 		this.panelMain = new JPanel();
 		this.buttonDelete = new JButton("Delete");
 		this.buttonPLH2 = new JButton("PLH2");
-
+		
+		
 		menuHelp.add(mItemAbout);
 		menuFile.add(mItemLoad);
 		menuFile.add(mItemSave);
@@ -111,7 +102,7 @@ public class Menu {
 			public void actionPerformed(ActionEvent e) {
 				
 				if (InstanceHandler.checkPort(CreateTaskUI.getPort())) {
-					new CreateTaskUI();
+					createtaskui = new CreateTaskUI();
 				}
 			}
 		});
@@ -166,6 +157,11 @@ public class Menu {
 		
 		
 		
+	}
+	
+	
+	public CreateTaskUI getCreateTaskUI() {
+		return this.createtaskui;
 	}
 	
 		//update timeLabel with current time.

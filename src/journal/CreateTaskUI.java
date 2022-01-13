@@ -4,10 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -96,59 +92,7 @@ public class CreateTaskUI {
 				
 		buttonTaskOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//create task instance if textbox has content, get input from textbox and additional settings.
-				
-				final String currentTaskDescription = txtTask.getText();
-				LocalDateTime timeDue;
-				boolean isCritical = false;
-				
-				DateTimeFormatter formatter = JournalController.getDateTimeFormatter();
-				
-				if (!currentTaskDescription.isBlank()) {
-					
-					
-					if (chkboxCritical.isSelected()) {
-						isCritical = true;
-					}
-					
-					switch(comboTaskType.getSelectedItem().toString()) {
-					
-						case"Midnight":
-							timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
-							break;
-						case"7 Days":
-							timeDue = LocalDateTime.of(java.time.LocalDate.now().plusDays(7), java.time.LocalTime.now());
-							break;
-						case"No Expiration":
-							timeDue = null;
-							break;
-						case"<Custom>":
-							try {
-							timeDue = LocalDateTime.parse(txtDue.getText(), formatter);
-							}
-							catch(DateTimeParseException exception) {
-								txtDue.setText("");
-								JOptionPane.showMessageDialog(frameCreateTask, "Incorrect custom date format, please try again.\nExact format of 'dd-MM-yyyy HH:mm:ss' is required.");
-								return;
-							}
-							
-							if (timeDue.isBefore(java.time.LocalDateTime.now())) {
-								JOptionPane.showMessageDialog(frameCreateTask, "Please enter a valid future date");
-							}
-							
-							
-							break;
-						default:
-							timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
-							break;
-					}
-					
-					JournalController.createTask(timeDue, isCritical, currentTaskDescription);
-					//put task in list to be displayed on main menu
-					frameCreateTask.dispose();
-					InstanceHandler.closePort(CreateTaskUI.getPort());
-					
-				}
+				JournalController.createTaskCheck();
 			}
 			
 		});
@@ -191,7 +135,50 @@ public class CreateTaskUI {
 		
 	}
 	
+	
 	public static int getPort() {
 		return PORT;
 	}
+	
+	public String getComponentComboTaskTypeSelectedString() {
+		return comboTaskType.getSelectedItem().toString();
+	}
+	
+	public String getComponentTxtDueString() {
+		return txtDue.getText();
+	}
+	
+	public String getComponentTxtTaskString() {
+		return txtTask.getText();
+	}
+	public boolean isComponentChkBoxCriticalChecked() {
+		
+		if (chkboxCritical.isSelected()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void setComponentTxtDueToBlank () {
+		txtDue.setText("");
+	}
+
+
+	public void showMessageIncorrectDateFormat() {
+		JOptionPane.showMessageDialog(frameCreateTask, "Incorrect custom date format, please try again.\nExact format of 'dd-MM-yyyy HH:mm:ss' is required.");
+	}
+
+
+	public void showMessageEnterFutureDate() {
+		JOptionPane.showMessageDialog(frameCreateTask, "Please enter a valid future date");
+		
+	}
+
+
+	public void disposeCreateTaskUI() {
+		frameCreateTask.dispose();
+	}
+	
+	
 }

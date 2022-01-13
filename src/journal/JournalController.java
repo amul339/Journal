@@ -22,6 +22,10 @@ public class JournalController extends JournalModels {
 		JournalModels.saveData();
 	}
 	
+	public static void createTaskCheck() {
+		JournalModels.createTaskCheck();
+	}
+	
 	public static void removeSelectedRowFromModel() {
 		JournalModels.removeSelectedRowFromModel();
 	}
@@ -32,6 +36,38 @@ public class JournalController extends JournalModels {
 	
 	public static menuTable getMenuTable() {
 		return JournalModels.getMenuTable();
+	}
+	
+	public static String getComponentComboTaskTypeSelectedString() {
+		return Main.getMenu().getCreateTaskUI().getComponentComboTaskTypeSelectedString();
+	}
+	
+	public static String getComponentTxtDueString() {
+		return Main.getMenu().getCreateTaskUI().getComponentTxtDueString();
+	}
+	
+	public static String getComponentTxtTaskString() {
+		return Main.getMenu().getCreateTaskUI().getComponentTxtTaskString();
+	}
+	
+	public static boolean isComponentChkBoxCriticalChecked() {
+		return Main.getMenu().getCreateTaskUI().isComponentChkBoxCriticalChecked();
+	}
+	
+	public static void setComponentTxtDueToBlank() {
+		Main.getMenu().getCreateTaskUI().setComponentTxtDueToBlank();
+	}
+	
+	public static void showMessageIncorrectDateFormat() {
+		Main.getMenu().getCreateTaskUI().showMessageIncorrectDateFormat();
+	}
+	
+	public static void showMessageEnterFutureDate() {
+		Main.getMenu().getCreateTaskUI().showMessageEnterFutureDate();
+	}
+	
+	public static void disposeCreateTaskUI() {
+		Main.getMenu().getCreateTaskUI().disposeCreateTaskUI();
 	}
 	
 	public static LocalDateTime getLocalDateTime() {
