@@ -69,14 +69,16 @@ public class JournalModels {
 		return false;
 	}
 	
-	protected static void removeSelectedRowFromModel() {
+	protected static boolean removeSelectedRowFromModel() {
 		
 		int selectedRow = getMenuTable().getSelectedRow();
 		
 		if (selectedRow != -1) {
 			getMenuTable().getTableModel().removeRow(selectedRow);
-			JournalController.setDeleteButton(false);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	protected static void saveData() {

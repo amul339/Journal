@@ -36,13 +36,16 @@ public class JournalController extends JournalModels {
 		}
 	}
 	
-	public static void removeSelectedRowFromModel() {
-		JournalModels.removeSelectedRowFromModel();
+	public static void removeSelectedRow() {
+		
+		if (JournalModels.removeSelectedRowFromModel()) {
+			JournalController.setDeleteButton(false);
+		}
 		
 		//Update UI Label to say that row has been removed?
 	}
 	
-	public static void setDeleteButton(boolean bool) {
+	private static void setDeleteButton(boolean bool) {
 		Main.getMenu().enableDelete(bool);
 	}
 	
