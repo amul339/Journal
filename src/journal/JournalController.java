@@ -7,14 +7,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class JournalController extends JournalModels {
-	
-	public static void createTask(LocalDateTime timeDue, boolean isCritical, String currentTaskDescription) {
-		// TODO Auto-generated method stub
-		JournalModels.createTask(timeDue, isCritical, currentTaskDescription);
-		
-	}
-	
+
+	//ALL PRIVATE FUNCTIONS 
 	public static void loadSavedData() {
+		//should probably clear tasks here prior to loading...
+		deleteAllTasks();
 		JournalModels.loadSavedData();
 	}
 	
@@ -22,48 +19,68 @@ public class JournalController extends JournalModels {
 		JournalModels.saveData();
 	}
 	
-	public static void createTaskCheck() {
-		JournalModels.createTaskCheck();
+	public static void createTaskFromUI() {
+		//Variables need for this
+		
+		String txtTaskString = JournalController.getComponentTxtTaskString();
+		String txtDueString = JournalController.getComponentTxtDueString();
+		String comboTaskTypeSelectedString = JournalController.getComponentComboTaskTypeSelectedString();
+		boolean isCritical = JournalController.isComponentChkBoxCriticalChecked();
+		
+		if (JournalModels.createTaskIfOk(txtTaskString, txtDueString, comboTaskTypeSelectedString, isCritical)) {
+			JournalController.disposeCreateTaskUI();
+			InstanceHandler.closePort(CreateTaskUI.getPort());
+		}
+		else {
+			JournalController.showMessageSomethingWentWrong();
+		}
 	}
 	
 	public static void removeSelectedRowFromModel() {
 		JournalModels.removeSelectedRowFromModel();
+		
+		//Update UI Label to say that row has been removed?
 	}
 	
 	public static void setDeleteButton(boolean bool) {
 		Main.getMenu().enableDelete(bool);
 	}
 	
+	//UI needs to access this therefore is set to public
 	public static menuTable getMenuTable() {
 		return JournalModels.getMenuTable();
 	}
 	
-	public static String getComponentComboTaskTypeSelectedString() {
+	private static String getComponentComboTaskTypeSelectedString() {
 		return Main.getMenu().getCreateTaskUI().getComponentComboTaskTypeSelectedString();
 	}
 	
-	public static String getComponentTxtDueString() {
+	private static String getComponentTxtDueString() {
 		return Main.getMenu().getCreateTaskUI().getComponentTxtDueString();
 	}
 	
-	public static String getComponentTxtTaskString() {
+	private static String getComponentTxtTaskString() {
 		return Main.getMenu().getCreateTaskUI().getComponentTxtTaskString();
 	}
 	
-	public static boolean isComponentChkBoxCriticalChecked() {
+	private static boolean isComponentChkBoxCriticalChecked() {
 		return Main.getMenu().getCreateTaskUI().isComponentChkBoxCriticalChecked();
 	}
 	
-	public static void setComponentTxtDueToBlank() {
+	private static void setComponentTxtDueToBlank() {
 		Main.getMenu().getCreateTaskUI().setComponentTxtDueToBlank();
 	}
 	
-	public static void showMessageIncorrectDateFormat() {
+	private static void showMessageIncorrectDateFormat() {
 		Main.getMenu().getCreateTaskUI().showMessageIncorrectDateFormat();
 	}
 	
-	public static void showMessageEnterFutureDate() {
+	private static void showMessageEnterFutureDate() {
 		Main.getMenu().getCreateTaskUI().showMessageEnterFutureDate();
+	}
+	
+	private static void showMessageSomethingWentWrong() {
+		Main.getMenu().getCreateTaskUI().showMessageSomethingWentWrong();
 	}
 	
 	public static void disposeCreateTaskUI() {

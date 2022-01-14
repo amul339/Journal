@@ -23,23 +23,17 @@ public class JournalModels {
 	
 	private static menuTable menuTable = new menuTable();
 	
-	protected static void createTaskCheck() {
+	
+	//createTaskIfOk returns true if all UI fields are OK for a task to be created, then creates the task.
+	protected static boolean createTaskIfOk(String txtTaskString, String txtDueString, String comboTaskTypeSelectedString, boolean isCritical) {
 		//create task instance if text-box has content, get input from text-box and additional settings.
+		LocalDateTime timeDue = null;
 		
-		final String currentTaskDescription = JournalController.getComponentTxtTaskString();
-		LocalDateTime timeDue;
-		boolean isCritical = false;
+		formatter = JournalModels.getDateTimeFormatter();
 		
-		DateTimeFormatter formatter = JournalController.getDateTimeFormatter();
-		
-		if (!currentTaskDescription.isBlank()) {
+		if (!txtTaskString.isBlank()) {
 			
-			
-			if (JournalController.isComponentChkBoxCriticalChecked()) {
-				isCritical = true;
-			}
-			
-			switch(JournalController.getComponentComboTaskTypeSelectedString()) {
+			switch(comboTaskTypeSelectedString) {
 			
 				case"Midnight":
 					timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
@@ -52,30 +46,27 @@ public class JournalModels {
 					break;
 				case"<Custom>":
 					try {
-					timeDue = LocalDateTime.parse(JournalController.getComponentTxtDueString(), formatter);
+					timeDue = LocalDateTime.parse(txtDueString, formatter);
 					}
 					catch(DateTimeParseException exception) {
-						JournalController.setComponentTxtDueToBlank();
-						JournalController.showMessageIncorrectDateFormat();
-						return;
+						return false;
 					}
 					
 					if (timeDue.isBefore(java.time.LocalDateTime.now())) {
-						JournalController.showMessageEnterFutureDate();
+						return false;
 					}
 					
 					break;
 				default:
-					timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
+					timeDue = null;
 					break;
 			}
 			
-			JournalController.createTask(timeDue, isCritical, currentTaskDescription);
-			//put task in list to be displayed on main menu
-			JournalController.disposeCreateTaskUI();
-			InstanceHandler.closePort(CreateTaskUI.getPort());
+			JournalModels.createTaskOnTable(timeDue, isCritical, txtTaskString);
 			
+			return true;
 		}
+		return false;
 	}
 	
 	protected static void removeSelectedRowFromModel() {
@@ -126,9 +117,6 @@ public class JournalModels {
 		int dataLoadCount = 0; // counts how many tasks have been loaded
 		System.out.println("Loading data...");
 		
-		//should probably clear tasks here prior to loading...
-		deleteAllTasks();
-		
 		try {
 			@SuppressWarnings("resource")
 			BufferedReader reader = new BufferedReader(new FileReader("resources/savedJData.txt"));
@@ -153,7 +141,7 @@ public class JournalModels {
 		
 	}
 	
-	protected static void createTask(LocalDateTime timeDue, boolean isCritical, String task) {
+	private static void createTaskOnTable(LocalDateTime timeDue, boolean isCritical, String task) {
 		getMenuTable().getTableModel().add(new Task(timeDue, isCritical, task));
 	}
 	
@@ -161,7 +149,8 @@ public class JournalModels {
 		getMenuTable().getTableModel().removeAll();
 	}
 	
-	protected static void loadSingleTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
+	//helper function
+	private static void loadSingleTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
 		getMenuTable().getTableModel().add(new Task(timeDue, timeAdded, isCritical, task));
 	}
 	//Converts task data to strings. Used for saving task data to text.

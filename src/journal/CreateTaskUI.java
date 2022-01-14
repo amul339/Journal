@@ -92,7 +92,7 @@ public class CreateTaskUI {
 				
 		buttonTaskOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JournalController.createTaskCheck();
+				JournalController.createTaskFromUI();
 			}
 			
 		});
@@ -173,6 +173,10 @@ public class CreateTaskUI {
 	public void showMessageEnterFutureDate() {
 		JOptionPane.showMessageDialog(frameCreateTask, "Please enter a valid future date");
 		
+	}
+	
+	public void showMessageSomethingWentWrong() {
+		JOptionPane.showMessageDialog(frameCreateTask, "Your task cannot be blank or contain any special characters. \nIf you have entered a custom date, please ensure you have entered a FUTURE date in the correct date format of 'dd-MM-yyyy HH:mm:ss'");
 	}
 
 
