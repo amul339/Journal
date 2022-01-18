@@ -22,13 +22,13 @@ public class InfoUI {
 		//assign sub-menu labels and components
 		this.frameAbout = new JFrame("About");
 		this.labelAbout = new JLabel("Journal in-dev");
-		this.labelAuthor = new JLabel("Created by Anthony Mulder 2021");
+		this.labelAuthor = new JLabel("<html> Created by Anthony Mulder 2021, 2022.<br> https://github.com/amul339 <html>");
 		this.panelAbout = new JPanel();
 		this.icon = new ImageIcon(getClass().getResource("/question.png"));
 		
 		//configure bounds for about panel components
 		labelAbout.setBounds(10,30,100,25);
-		labelAuthor.setBounds(10,50,200,25);
+		labelAuthor.setBounds(10,50,250,50);
 				
 		//configure 'about' frame and add pane
 		frameAbout.setSize(300,150);

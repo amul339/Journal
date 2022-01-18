@@ -28,6 +28,14 @@ public class JournalModels {
 		
 		formatter = JournalModels.getDateTimeFormatter();
 		
+		
+		//band aid fix to not crash load/save system
+		if (txtTaskString.contains("^")) {
+			return false;
+		}
+		
+		
+		
 		if (!txtTaskString.isBlank()) {
 			
 			switch(comboTaskTypeSelectedString) {

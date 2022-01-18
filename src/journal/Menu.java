@@ -46,7 +46,7 @@ public class Menu {
 		//assign panels and other garbage
 		this.timeLabel = new JLabel(JournalController.localDateTimeFormatter(JournalController.getLocalDateTime()), JLabel.CENTER);
 		this.timeMsg  = new JLabel("System time:");
-		this.labelStatus = new JLabel("Testing");
+		this.labelStatus = new JLabel("Journal test build -- https://github.com/amul339");
 		this.panelMain = new JPanel();
 		this.buttonDelete = new JButton("Delete");
 		this.buttonPLH2 = new JButton("PLH2");
@@ -64,7 +64,7 @@ public class Menu {
 		
 		//configure bounds for main panel components
 		timeLabel.setBounds(-30, -15, 200, 100);
-		labelStatus.setBounds(12, 370, 200, 100);
+		labelStatus.setBounds(12, 370, 350, 100);
 		timeMsg.setBounds(12,5,100,20);
 		buttonDelete.setBounds(390,10,80,25);
 		buttonPLH2.setBounds(390,50,80,25);
