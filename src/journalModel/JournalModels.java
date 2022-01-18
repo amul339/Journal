@@ -11,9 +11,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-
-import journal.CreateTaskUI;
-import journal.InstanceHandler;
 import journal.JournalController;
 
 
@@ -21,7 +18,7 @@ public class JournalModels {
 	
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
-	private static menuTable menuTable = new menuTable();
+	private static CustomTableModel customtablemodel = new CustomTableModel();
 	
 	
 	//createTaskIfOk returns true if all UI fields are OK for a task to be created, then creates the task.
@@ -69,12 +66,10 @@ public class JournalModels {
 		return false;
 	}
 	
-	protected static boolean removeSelectedRowFromModel() {
-		
-		int selectedRow = getMenuTable().getSelectedRow();
+	protected static boolean removeSelectedRowFromModel(int selectedRow) {
 		
 		if (selectedRow != -1) {
-			getMenuTable().getTableModel().removeRow(selectedRow);
+			getCustomTableModel().removeRow(selectedRow);
 			return true;
 		}
 		
@@ -83,10 +78,13 @@ public class JournalModels {
 	
 	protected static void saveData() {
 		// save each task and its data in text file format
+		int dataSaveCount = 0;
+		
 		try {
 			
+			
 			ArrayList<String> strTableTasks = new ArrayList<String>();
-			ArrayList<Task> tableTasks = getMenuTable().getTableModel().getData();
+			ArrayList<Task> tableTasks = getCustomTableModel().getData();
 		
 			Path file = Paths.get("resources/savedJData.txt");
 			
@@ -98,6 +96,7 @@ public class JournalModels {
 			//finally write to file
 			for (Task task : tableTasks) {
 				strTableTasks.add(taskAttribToString(task));
+				dataSaveCount++;
 			}
 			
 			//add indicator for EOF
@@ -105,10 +104,11 @@ public class JournalModels {
 		
 			Files.write(file, strTableTasks, StandardCharsets.UTF_8);
 			
-			System.out.println("Successfully saved data");
+			System.out.println("Successfully saved data " + "(" + dataSaveCount + " Tasks" + ")");
 			
 		}
 		catch (Exception ex) {
+			dataSaveCount = -1;
 			System.out.println("Write error");
 			System.out.println(ex);
 		}
@@ -139,21 +139,22 @@ public class JournalModels {
 		}
 		catch(Exception ex) {
 			System.out.println("Failed to load data on file line " + dataLoadCount + ", possibly corrupt?");
+			dataLoadCount = -1;
 		}
 		
 	}
 	
 	private static void createTaskOnTable(LocalDateTime timeDue, boolean isCritical, String task) {
-		getMenuTable().getTableModel().add(new Task(timeDue, isCritical, task));
+		getCustomTableModel().add(new Task(timeDue, isCritical, task));
 	}
 	
 	protected static void deleteAllTasks() {
-		getMenuTable().getTableModel().removeAll();
+		getCustomTableModel().removeAll();
 	}
 	
 	//helper function
 	private static void loadSingleTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
-		getMenuTable().getTableModel().add(new Task(timeDue, timeAdded, isCritical, task));
+		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task));
 	}
 	//Converts task data to strings. Used for saving task data to text.
 	protected static String taskAttribToString(Task task) {
@@ -166,8 +167,8 @@ public class JournalModels {
 		return dueTime + "^" + addedTime + "^" + isCritical + "^" + taskDesc;
 	}
 	
-	protected static menuTable getMenuTable() {
-		return menuTable;
+	protected static CustomTableModel getCustomTableModel() {
+		return customtablemodel;
 	}
 	
 	protected static DateTimeFormatter getDateTimeFormatter() {

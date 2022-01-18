@@ -1,10 +1,12 @@
 package journal;
 
-import journalModel.JournalModels;
-import journalModel.menuTable;
+import journalModel.*;
 
+import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import javax.swing.JTable;
 
 public class JournalController extends JournalModels {
 
@@ -32,26 +34,56 @@ public class JournalController extends JournalModels {
 			InstanceHandler.closePort(CreateTaskUI.getPort());
 		}
 		else {
+			JournalController.setComponentTxtDueToBlank();
 			JournalController.showMessageSomethingWentWrong();
 		}
 	}
 	
 	public static void removeSelectedRow() {
 		
-		if (JournalModels.removeSelectedRowFromModel()) {
+		int selectedRow = Main.getMenu().getMenuTable().getSelectedRow();
+		
+		if (JournalModels.removeSelectedRowFromModel(selectedRow)) {
 			JournalController.setDeleteButton(false);
 		}
 		
 		//Update UI Label to say that row has been removed?
 	}
 	
-	private static void setDeleteButton(boolean bool) {
-		Main.getMenu().enableDelete(bool);
+	
+	/// this method could probably be moved to a dedicated journal 'sensor' package to separate out other method calls.
+	public static void deleteButtonTableSensor(MouseEvent e) {
+		
+		JTable src = (JTable) e.getSource();
+	      int row = src.rowAtPoint(e.getPoint());
+	      //int col = src.columnAtPoint(e.getPoint());
+	      
+	    //exception keeps happening even with a surrounding if statement?? FIXME
+	      //try-catch to stay for now...
+	      try {
+	    	  Main.getMenu().getMenuTable().setSelectedRow(Main.getMenu().getMenuTable().getTableTasks().getRowSorter().convertRowIndexToModel(row));
+	    	  JournalController.setDeleteButton(true);
+	      }
+	      catch (ArrayIndexOutOfBoundsException exception) {
+	    	  Main.getMenu().getMenuTable().setSelectedRow(-1);
+	    	  
+	    	  JournalController.setDeleteButton(false);
+	      }
+		
 	}
 	
+	
+	
 	//UI needs to access this therefore is set to public
-	public static menuTable getMenuTable() {
-		return JournalModels.getMenuTable();
+	public static CustomTableModel getCustomTableModelCall() {
+		return JournalModels.getCustomTableModel();
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	private static void setDeleteButton(boolean bool) {
+		Main.getMenu().enableDelete(bool);
 	}
 	
 	private static String getComponentComboTaskTypeSelectedString() {

@@ -20,12 +20,16 @@ public class Menu {
 	private ImageIcon icon;
 	
 	private CreateTaskUI createtaskui;
+	private MenuTable menutable;
 	
 	public Menu() {
 		
 		//assign frames
 		this.frameMain = new JFrame("Journal");
 		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
+		
+		//assign menu table, call controller for model assignment.
+		this.menutable = new MenuTable(JournalController.getCustomTableModelCall());
 	
 		//assignment tool-bar and menu items
 		this.menuBar = new JMenuBar();
@@ -87,7 +91,7 @@ public class Menu {
 		panelMain.add(timeMsg);
 		panelMain.add(buttonDelete);
 		panelMain.add(buttonPLH2);
-		panelMain.add(JournalController.getMenuTable().getScrollTasks());
+		panelMain.add(menutable.getScrollTasks());
 		
 		
 		mItemAbout.addActionListener(new ActionListener() {
@@ -125,7 +129,7 @@ public class Menu {
 		
 		buttonDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JournalController.removeSelectedRowFromModel();
+				JournalController.removeSelectedRow();
 			}
 		});
 		
@@ -162,6 +166,10 @@ public class Menu {
 	
 	public CreateTaskUI getCreateTaskUI() {
 		return this.createtaskui;
+	}
+	
+	public MenuTable getMenuTable() {
+		return this.menutable;
 	}
 	
 		//update timeLabel with current time.
