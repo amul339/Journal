@@ -111,15 +111,13 @@ public class Menu {
 			}
 		});
 		
-		/*
+		
 		mItemClrAllTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (InstanceHandler.checkPort(DeleteTasksUI.getPort())) {
-					new DeleteTasksUI();
-				}
+				JournalController.ClearAllTasksCall();
 			}
 		});
-		*/
+		
 		mItemExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -135,13 +133,13 @@ public class Menu {
 		
 		mItemLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JournalController.loadSavedData();
+				JournalController.loadSavedDataCall();
 			}
 		});
 		
 		mItemSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JournalController.saveData();
+				JournalController.saveDataCall();
 			}
 		});
 		
@@ -172,6 +170,10 @@ public class Menu {
 		return this.menutable;
 	}
 	
+	public void setStatusLabel(String str) {
+		this.labelStatus.setText(str);
+	}
+	
 		//update timeLabel with current time.
 	private void updateTimeLabel() {
 		this.timeLabel.setText(JournalController.localDateTimeFormatter(JournalController.getLocalDateTime()));
@@ -190,10 +192,14 @@ public class Menu {
 		getDeleteButton().setEnabled(bool);
 	}
 	
+	//returns integer for option selected
+	public int promptClearAllTasks() {
+		return JOptionPane.showConfirmDialog(frameMain, "This will clear all tasks from the table.\nAre you sure you want to continue?", "Clear All Tasks?", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+	}
+	
 	public static int getPort() {
 		return PORT;
 	}
-	
 	
 	
 	

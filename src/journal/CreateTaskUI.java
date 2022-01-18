@@ -31,11 +31,7 @@ public class CreateTaskUI {
 	public CreateTaskUI() {
 		
 		
-		//Local result variable generated from CreateTaskUI to be picked up by JournalModels after sending message to Main to create task instance.
-		
-		
-		
-		
+		//Local result variable generated from CreateTaskUI to be picked up by JournalModels after sending message to Main to create task instance.	
 		this.frameCreateTask = new JFrame("Create Task");
 		this.panelCreateTask = new JPanel();
 		this.chkboxCritical = new JCheckBox("Critical");

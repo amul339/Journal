@@ -11,14 +11,32 @@ import javax.swing.JTable;
 public class JournalController extends JournalModels {
 
 	//ALL PRIVATE FUNCTIONS 
-	public static void loadSavedData() {
+	public static void loadSavedDataCall() {
 		//should probably clear tasks here prior to loading...
-		deleteAllTasks();
-		JournalModels.loadSavedData();
+		JournalModels.deleteAllTasks();
+		
+		int dataLoadCount = JournalModels.loadSavedData();
+		
+		if (dataLoadCount == -1) {
+			JournalController.setStatusLabel("Failed to load data");
+		}
+		else {
+			JournalController.setStatusLabel("Successfully loaded " + dataLoadCount + " tasks");
+		}
+		
 	}
 	
-	public static void saveData() {
-		JournalModels.saveData();
+	public static void saveDataCall() {
+		
+		int dataSaveCount = JournalModels.saveData();
+		
+		if (dataSaveCount == -1) {
+			JournalController.setStatusLabel("Failed to save data");
+		}
+		else {
+			JournalController.setStatusLabel("Successfully saved " + dataSaveCount + " tasks");
+		}
+		
 	}
 	
 	public static void createTaskFromUI() {
@@ -31,6 +49,7 @@ public class JournalController extends JournalModels {
 		
 		if (JournalModels.createTaskIfOk(txtTaskString, txtDueString, comboTaskTypeSelectedString, isCritical)) {
 			JournalController.disposeCreateTaskUI();
+			JournalController.setStatusLabel("Task created successfully");
 			InstanceHandler.closePort(CreateTaskUI.getPort());
 		}
 		else {
@@ -72,7 +91,14 @@ public class JournalController extends JournalModels {
 		
 	}
 	
-	
+	public static void ClearAllTasksCall() {
+		// TODO Auto-generated method stub
+		if (Main.getMenu().promptClearAllTasks() == 0) {
+			JournalModels.deleteAllTasks();
+			JournalController.setStatusLabel("Cleared All Tasks");
+		}
+		
+	}
 	
 	//UI needs to access this therefore is set to public
 	public static CustomTableModel getCustomTableModelCall() {
@@ -81,9 +107,12 @@ public class JournalController extends JournalModels {
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
 	private static void setDeleteButton(boolean bool) {
 		Main.getMenu().enableDelete(bool);
+	}
+	
+	public static void setStatusLabel(String str) {
+		Main.getMenu().setStatusLabel(str);
 	}
 	
 	private static String getComponentComboTaskTypeSelectedString() {
@@ -133,6 +162,5 @@ public class JournalController extends JournalModels {
 	public static String localDateTimeFormatter(LocalDateTime localdatetime) {
 		return JournalModels.localDateTimeFormatter(localdatetime);
 	}
-	
 	
 }

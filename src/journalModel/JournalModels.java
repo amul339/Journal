@@ -76,7 +76,9 @@ public class JournalModels {
 		return false;
 	}
 	
-	protected static void saveData() {
+	//returns the number of tasks successfully saved to file.
+	//if error found, returns -1.
+	protected static int saveData() {
 		// save each task and its data in text file format
 		int dataSaveCount = 0;
 		
@@ -113,9 +115,12 @@ public class JournalModels {
 			System.out.println(ex);
 		}
 		
+		return dataSaveCount;
 	}
 	
-	protected static void loadSavedData() {
+	//returns number of tasks that have been successfully loaded
+	//if error found, returns -1.
+	protected static int loadSavedData() {
 		int dataLoadCount = 0; // counts how many tasks have been loaded
 		System.out.println("Loading data...");
 		
@@ -142,6 +147,7 @@ public class JournalModels {
 			dataLoadCount = -1;
 		}
 		
+		return dataLoadCount;
 	}
 	
 	private static void createTaskOnTable(LocalDateTime timeDue, boolean isCritical, String task) {
