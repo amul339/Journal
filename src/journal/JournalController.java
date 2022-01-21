@@ -12,6 +12,12 @@ public class JournalController extends JournalModels {
 
 	//ALL PRIVATE FUNCTIONS 
 	public static void loadSavedDataCall() {
+		
+		
+		
+		//check if directory exists
+		JournalModels.initDirectory();
+		
 		//should probably clear tasks here prior to loading...
 		JournalModels.deleteAllTasks();
 		
@@ -27,6 +33,9 @@ public class JournalController extends JournalModels {
 	}
 	
 	public static void saveDataCall() {
+		
+		//check if directory exists
+		JournalModels.initDirectory();
 		
 		int dataSaveCount = JournalModels.saveData();
 		
@@ -135,10 +144,12 @@ public class JournalController extends JournalModels {
 		Main.getMenu().getCreateTaskUI().setComponentTxtDueToBlank();
 	}
 	
+	@SuppressWarnings("unused")
 	private static void showMessageIncorrectDateFormat() {
 		Main.getMenu().getCreateTaskUI().showMessageIncorrectDateFormat();
 	}
 	
+	@SuppressWarnings("unused")
 	private static void showMessageEnterFutureDate() {
 		Main.getMenu().getCreateTaskUI().showMessageEnterFutureDate();
 	}

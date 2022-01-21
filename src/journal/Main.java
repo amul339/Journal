@@ -11,7 +11,8 @@ public class Main {
 		if (InstanceHandler.checkPort(Menu.getPort())) {
 			menu = new Menu();
 			System.out.print("LAUNCHING!!!");
-		}	
+		}
+		
 	}
 	
 	public static Menu getMenu() {

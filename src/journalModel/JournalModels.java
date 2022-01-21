@@ -1,6 +1,7 @@
 package journalModel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -20,6 +21,32 @@ public class JournalModels {
 	
 	private static CustomTableModel customtablemodel = new CustomTableModel();
 	
+	private static String targetDirectory = System.getProperty("user.home").concat("\\Documents\\Journal");
+	private static String targetSavedLocation = System.getProperty("user.home").concat("\\Documents\\Journal\\savedJData.txt");
+	
+	//returns boolean (yes if directory exists, otherwise no)
+	protected static void initDirectory() {
+		
+		//first checks if directory already exists.
+		
+		File dir = new File(targetDirectory);
+		if (!dir.exists()){
+		    dir.mkdirs();
+		}
+		
+		/*
+		ArrayList<String> arr = new ArrayList<String>();
+		arr.add("END");
+		
+		try {
+			Files.write(Paths.get(targetSavedLocation), arr, StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+	}
+	
 	
 	//createTaskIfOk returns true if all UI fields are OK for a task to be created, then creates the task.
 	protected static boolean createTaskIfOk(String txtTaskString, String txtDueString, String comboTaskTypeSelectedString, boolean isCritical) {
@@ -36,7 +63,7 @@ public class JournalModels {
 		
 		
 		
-		if (!txtTaskString.isBlank()) {
+		if (!txtTaskString.equals("")) {
 			
 			switch(comboTaskTypeSelectedString) {
 			
@@ -96,7 +123,7 @@ public class JournalModels {
 			ArrayList<String> strTableTasks = new ArrayList<String>();
 			ArrayList<Task> tableTasks = getCustomTableModel().getData();
 		
-			Path file = Paths.get("resources/savedJData.txt");
+			Path file = Paths.get(targetSavedLocation);
 			
 			
 			
@@ -134,7 +161,7 @@ public class JournalModels {
 		
 		try {
 			@SuppressWarnings("resource")
-			BufferedReader reader = new BufferedReader(new FileReader("resources/savedJData.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader(targetSavedLocation));
 			String rline = reader.readLine();
 				
 			while(!rline.equals("END")) {
