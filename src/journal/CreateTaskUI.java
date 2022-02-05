@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class CreateTaskUI {
@@ -22,9 +24,11 @@ public class CreateTaskUI {
 	private JCheckBox chkboxCritical;
 	private JComboBox<String> comboTaskType;
 	private JTextField txtTask, txtDue;
-	private JLabel labeltxtTask, labelTaskType, labeltxtCustom;
+	private JTextArea txtDesc;
+	private JLabel labeltxtTask, labeltxtTaskDesc, labelTaskType, labeltxtCustom;
 	private JButton buttonTaskOk, buttonTaskCancel;
 	private ImageIcon icon;
+	private JScrollPane scrolltxtDesc;
 	
 	private static final int PORT = 7001;
 		
@@ -38,8 +42,11 @@ public class CreateTaskUI {
 		this.comboTaskType = new JComboBox<String>();
 		this.txtTask = new JTextField();
 		this.txtDue = new JTextField();
+		this.txtDesc = new JTextArea();
+		this.scrolltxtDesc = new JScrollPane();
 		this.labeltxtCustom = new JLabel("Custom Due Date (dd-MM-yyyy HH:mm:ss)");
-		this.labeltxtTask = new JLabel("Describe your task in the box below:");
+		this.labeltxtTask = new JLabel("Task title:");
+		this.labeltxtTaskDesc = new JLabel("Describe your task in the box below:");
 		this.labelTaskType = new JLabel("Task Type:");
 		this.buttonTaskOk = new JButton("Create");
 		this.buttonTaskCancel = new JButton("Cancel");
@@ -49,22 +56,29 @@ public class CreateTaskUI {
 		//configure bounds for create_task panel components
 		labeltxtTask.setBounds(10, 10, 250, 20);
 		txtTask.setBounds(10, 35, 300, 20);
-		txtDue.setBounds(10, 140, 150, 20);
-		labeltxtCustom.setBounds(10, 115, 250, 20);
+		txtDue.setBounds(10, 220, 150, 20);
+		labeltxtCustom.setBounds(10, 195, 250, 20);
 		comboTaskType.addItem("Midnight");
 		comboTaskType.addItem("7 Days");
 		comboTaskType.addItem("No Expiration");
 		comboTaskType.addItem("<Custom>");
+		scrolltxtDesc.add(txtDesc);
+		txtDesc.setLineWrap(true);
+		txtDesc.setEditable(true);
+		scrolltxtDesc.setEnabled(true);
+		txtDesc.setEnabled(true);
 		
-		labelTaskType.setBounds(10, 60, 150, 20);
-		comboTaskType.setBounds(10, 85, 100, 20);
-		chkboxCritical.setBounds(160, 85 , 100, 20);
+		labelTaskType.setBounds(10, 140, 150, 20);
+		comboTaskType.setBounds(10, 165, 100, 20);
+		chkboxCritical.setBounds(160, 165 , 100, 20);
 		buttonTaskOk.setBounds(365, 35, 80, 40);
 		buttonTaskCancel.setBounds(365, 90, 80, 25);
+		labeltxtTaskDesc.setBounds(10, 60, 250, 20);
+		scrolltxtDesc.setBounds(10, 85, 300, 50);
 		txtDue.setEnabled(false);
 		labeltxtCustom.setEnabled(false);
 		//configure 'create task' frame and add panel
-		frameCreateTask.setSize(500,220);
+		frameCreateTask.setSize(500,300);
 		frameCreateTask.setResizable(false);
 		frameCreateTask.setIconImage(icon.getImage());
 		frameCreateTask.add(panelCreateTask);
@@ -72,16 +86,18 @@ public class CreateTaskUI {
 				
 		panelCreateTask.setLayout(null);
 				
-				//add components to 'create task' panel
+		//add components to 'create task' panel
 		panelCreateTask.add(comboTaskType);
 		panelCreateTask.add(chkboxCritical);
 		panelCreateTask.add(txtTask);
 		panelCreateTask.add(txtDue);
+		panelCreateTask.add(scrolltxtDesc);
 		panelCreateTask.add(labeltxtCustom);
 		panelCreateTask.add(labeltxtTask);
 		panelCreateTask.add(labelTaskType);
 		panelCreateTask.add(buttonTaskOk);
 		panelCreateTask.add(buttonTaskCancel);
+		panelCreateTask.add(labeltxtTaskDesc);
 		
 		frameCreateTask.setLocationRelativeTo(null);
 		frameCreateTask.setVisible(true);

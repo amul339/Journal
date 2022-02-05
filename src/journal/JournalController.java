@@ -125,39 +125,30 @@ public class JournalController extends JournalModels {
 	}
 	
 	private static String getComponentComboTaskTypeSelectedString() {
-		return Main.getMenu().getCreateTaskUI().getComponentComboTaskTypeSelectedString();
+		return Main.getMenu().getCreateTaskCard().getComponentComboTaskTypeSelectedString();
 	}
 	
 	private static String getComponentTxtDueString() {
-		return Main.getMenu().getCreateTaskUI().getComponentTxtDueString();
+		return Main.getMenu().getCreateTaskCard().getComponentTxtDueString();
 	}
 	
 	private static String getComponentTxtTaskString() {
-		return Main.getMenu().getCreateTaskUI().getComponentTxtTaskString();
+		return Main.getMenu().getCreateTaskCard().getComponentTxtTaskString();
 	}
 	
 	private static boolean isComponentChkBoxCriticalChecked() {
-		return Main.getMenu().getCreateTaskUI().isComponentChkBoxCriticalChecked();
+		return Main.getMenu().getCreateTaskCard().isComponentChkBoxCriticalChecked();
 	}
 	
 	private static void setComponentTxtDueToBlank() {
 		Main.getMenu().getCreateTaskUI().setComponentTxtDueToBlank();
 	}
 	
-	@SuppressWarnings("unused")
-	private static void showMessageIncorrectDateFormat() {
-		Main.getMenu().getCreateTaskUI().showMessageIncorrectDateFormat();
+	private static void returnUIToIdle() {
+		Main.getMenu()
 	}
 	
 	@SuppressWarnings("unused")
-	private static void showMessageEnterFutureDate() {
-		Main.getMenu().getCreateTaskUI().showMessageEnterFutureDate();
-	}
-	
-	private static void showMessageSomethingWentWrong() {
-		Main.getMenu().getCreateTaskUI().showMessageSomethingWentWrong();
-	}
-	
 	public static void disposeCreateTaskUI() {
 		Main.getMenu().getCreateTaskUI().disposeCreateTaskUI();
 	}

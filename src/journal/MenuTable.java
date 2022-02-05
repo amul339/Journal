@@ -41,9 +41,9 @@ public class MenuTable {
 		sorter.setSortKeys(sortKeys);
 		
 		
-		scrollTasks.setBounds(12, 50, 360, 360);
+		scrollTasks.setBounds(12, 50, 400, 360);
 		
-		
+		tableTasks.getColumn("Task").setPreferredWidth(100);
 		
 		tableTasks.addMouseListener(new MouseAdapter() {
 		    @Override

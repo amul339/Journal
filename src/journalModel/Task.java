@@ -8,6 +8,7 @@ public class Task {
 	
 	private boolean isCritical;
 	private String task;
+	private String subject;
 	private LocalDateTime timeAdded, timeDue;
 	
 	

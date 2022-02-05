@@ -33,11 +33,11 @@ private static final long serialVersionUID = 1L;
     public String getColumnName(int column) {
     	switch (column) {
     	case 0:
-    		return "Task";
+    		return "Subject";
     	case 1:
-    		return "Due";
+    		return "Task";
     	case 2:
-    		return "Date Created";
+    		return "Due";
     	}
     	return null;
     }
