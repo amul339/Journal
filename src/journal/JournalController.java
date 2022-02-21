@@ -6,9 +6,14 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 
 public class JournalController extends JournalModels {
+	final static String CREATETASKPANEL = "Create Task Panel";
+	final static String IDLEPANEL = "Idle Panel";
 
 	//ALL PRIVATE FUNCTIONS 
 	public static void loadSavedDataCall() {
@@ -54,12 +59,12 @@ public class JournalController extends JournalModels {
 		String txtTaskString = JournalController.getComponentTxtTaskString();
 		String txtDueString = JournalController.getComponentTxtDueString();
 		String comboTaskTypeSelectedString = JournalController.getComponentComboTaskTypeSelectedString();
+		String comboSubjectSelectedString = Main.getMenu().getCreateTaskCard().getComboSubjectSelectedString();
 		boolean isCritical = JournalController.isComponentChkBoxCriticalChecked();
 		
-		if (JournalModels.createTaskIfOk(txtTaskString, txtDueString, comboTaskTypeSelectedString, isCritical)) {
-			JournalController.disposeCreateTaskUI();
+		if (JournalModels.createTaskIfOk(txtTaskString, txtDueString,  comboTaskTypeSelectedString, isCritical)) {
+			JournalController.switchToIdlePanel();
 			JournalController.setStatusLabel("Task created successfully");
-			InstanceHandler.closePort(CreateTaskUI.getPort());
 		}
 		else {
 			JournalController.setComponentTxtDueToBlank();
@@ -109,6 +114,16 @@ public class JournalController extends JournalModels {
 		
 	}
 	
+	public static void switchToIdlePanel() {
+		JPanel panelSecondary = Main.getMenu().getSecondaryPanel();
+		Main.getMenu().getCardLayout().show(panelSecondary, IDLEPANEL);
+	}
+	
+	public static void switchToCreatePanel() {
+		JPanel panelSecondary = Main.getMenu().getSecondaryPanel();
+		Main.getMenu().getCardLayout().show(panelSecondary, CREATETASKPANEL);
+	}
+	
 	//UI needs to access this therefore is set to public
 	public static CustomTableModel getCustomTableModelCall() {
 		return JournalModels.getCustomTableModel();
@@ -141,16 +156,12 @@ public class JournalController extends JournalModels {
 	}
 	
 	private static void setComponentTxtDueToBlank() {
-		Main.getMenu().getCreateTaskUI().setComponentTxtDueToBlank();
+		Main.getMenu().getCreateTaskCard().setComponentTxtDueToBlank();
 	}
 	
-	private static void returnUIToIdle() {
-		Main.getMenu()
-	}
-	
-	@SuppressWarnings("unused")
-	public static void disposeCreateTaskUI() {
-		Main.getMenu().getCreateTaskUI().disposeCreateTaskUI();
+	public static void showMessageSomethingWentWrong() {
+		JFrame frame = Main.getMenu().getMenuFrame();
+		JOptionPane.showMessageDialog(frame, "Your task cannot be blank or contain any special characters. \nIf you have entered a custom date, please ensure you have entered a FUTURE date in the correct date format of 'dd-MM-yyyy HH:mm:ss'");
 	}
 	
 	public static LocalDateTime getLocalDateTime() {

@@ -45,7 +45,6 @@ public class CreateTaskPanel extends JPanel {
 	private JSeparator separator_2;
 	private JButton buttonCreate;
 	private JButton buttonClear;
-	private JButton buttonClose;
 
 	/**
 	 * Create the panel.
@@ -142,32 +141,21 @@ public class CreateTaskPanel extends JPanel {
 		separator_2.setBounds(12, 430, 296, 10);
 		panel.add(separator_2);
 		
-		buttonCreate = new JButton("Create");
+		buttonCreate = new JButton("Create Task !");
 		buttonCreate.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
 		
-		buttonCreate.setBounds(40, 452, 72, 25);
+		buttonCreate.setBounds(50, 452, 112, 25);
 		panel.add(buttonCreate);
 		
 		buttonClear = new JButton("Clear");
 		buttonClear.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
 		
-		buttonClear.setBounds(125, 452, 72, 25);
+		buttonClear.setBounds(190, 452, 72, 25);
 		panel.add(buttonClear);
-		
-		buttonClose = new JButton("Close");
-		buttonClose.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
-		buttonClose.setBounds(209, 452, 72, 25);
-		panel.add(buttonClose);
 		
 		buttonCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JournalController.createTaskFromUI();
-			}
-			
-		});
-		
-		buttonClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
 			}
 			
 		});
@@ -187,6 +175,11 @@ public class CreateTaskPanel extends JPanel {
 	public String getComponentTxtTaskString() {
 		return txtTitle.getText();
 	}
+	
+	public String getComponentComboSubjectSelectedString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	public boolean isComponentChkBoxCriticalChecked() {
 		
 		if (checkBoxCritical.isSelected()) {
@@ -199,5 +192,6 @@ public class CreateTaskPanel extends JPanel {
 	public void setComponentTxtDueToBlank() {
 		textFieldCustomDate.setText("");
 	}
+	
 	
 }

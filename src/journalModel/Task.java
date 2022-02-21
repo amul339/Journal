@@ -8,11 +8,11 @@ public class Task {
 	
 	private boolean isCritical;
 	private String task;
-	private String subject;
+	private Subject subject;
 	private LocalDateTime timeAdded, timeDue;
 	
 	
-	public Task(LocalDateTime timeDue, boolean isCritical, String task) {
+	public Task(LocalDateTime timeDue, boolean isCritical, String task, Subject subject) {
 		this.timeDue= timeDue;
 		this.task = task;
 		this.isCritical = isCritical;
@@ -22,11 +22,12 @@ public class Task {
 	
 	
 	//alternate task constructor for loading data from 
-	public Task(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
+	public Task(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
 		this.timeDue = timeDue;
 		this.task = task;
 		this.isCritical = isCritical;
 		this.timeAdded = timeAdded;
+		this.subject = subject;
 	}
 	
 	public boolean checkIfCritical() {

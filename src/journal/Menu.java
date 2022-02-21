@@ -3,26 +3,32 @@ package journal;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 
 public class Menu {
 	private static final int PORT = 7000;
+	
 	final static String CREATETASKPANEL = "Create Task Panel";
 	final static String IDLEPANEL = "Idle Panel";
 	
 	//ALL SUB PANELS FOR MENU ARE REQUIRED TO BE 320X500 IN RESOLUTION
 	
-	private JLabel timeMsg, timeLabel, labelStatus;
+	private JLabel timeMsg, timeLabel, labelStatus, labelLogo;
 	private Timer timer;
 	private JFrame frameMain;
 	private JPanel panelSecondary;
-	//private IdlePanel idleCard;
-	private CreateTaskPanel createTaskCard;
+	private IdlePanel idlePanel;
+	private CreateTaskPanel createTaskPanel;
 	private JButton buttonDelete;
 	private JMenuBar menuBar;
 	private JMenu menuFile, menuUtilities, menuHelp;
@@ -32,6 +38,7 @@ public class Menu {
 	
 	private CreateTaskUI createtaskui;
 	private MenuTable menutable;
+	private ImageIcon logo;
 	
 	public Menu()  {
 		
@@ -40,7 +47,6 @@ public class Menu {
 		//assign menu table, call controller for model assignment.
 		this.menutable = new MenuTable(JournalController.getCustomTableModelCall());
 		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
-	
 		//assignment tool-bar and menu items
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
@@ -58,6 +64,7 @@ public class Menu {
 		this.timeMsg  = new JLabel("System time:");
 		this.labelStatus = new JLabel("Journal test build -- https://github.com/amul339");
 		
+		
 		this.buttonDelete = new JButton("Delete");
 		
 		///////////////////////////////
@@ -67,8 +74,8 @@ public class Menu {
 		
 		
 		//RIGHT HAND SIDE UI CARDS INITIALIZED HERE!!!!
-		this.idleCard = new IdlePanel();
-		this.createTaskCard = new CreateTaskPanel();
+		this.idlePanel = new IdlePanel();
+		this.createTaskPanel = new CreateTaskPanel();
 		
 		///////////////////////////////
 		menuHelp.add(mItemAbout);
@@ -85,13 +92,13 @@ public class Menu {
 		
 		//configure bounds for main panel components
 		timeLabel.setBounds(-30, -15, 200, 100);
-		labelStatus.setBounds(12, 370, 350, 300);
-		timeMsg.setBounds(12,5,100,20);
-		buttonDelete.setBounds(12,425,80,25);
+		labelStatus.setBounds(10, 370, 350, 300);
+		timeMsg.setBounds(10,5,100,20);
+		buttonDelete.setBounds(10,425,80,25);
 		menuUtilities.setEnabled(false);
 		mItemLoad.setEnabled(true);
 		buttonDelete.setEnabled(false);
-		panelSecondary.setBounds(438, 20, 320, 500);
+		panelSecondary.setBounds(440, 20, 320, 500);
 		
 		//panelSecondary.setBorder(BorderFactory.createLineBorder(Color.black));
 		
@@ -109,8 +116,8 @@ public class Menu {
 		panelSecondary.setLayout(cardLayout);
 		
 		//add cards to panelSecondary CardLayout
-		panelSecondary.add(idleCard, IDLEPANEL);
-		panelSecondary.add(createTaskCard, CREATETASKPANEL);
+		panelSecondary.add(idlePanel, IDLEPANEL);
+		panelSecondary.add(createTaskPanel, CREATETASKPANEL);
 		
 		
 		//add components
@@ -132,10 +139,7 @@ public class Menu {
 		
 		mItemCreateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				if (InstanceHandler.checkPort(CreateTaskUI.getPort())) {
-					cardLayout.show(panelSecondary, CREATETASKPANEL);
-				}
+				cardLayout.show(panelSecondary, CREATETASKPANEL);
 			}
 		});
 		
@@ -190,12 +194,20 @@ public class Menu {
 		
 	}
 	
-	public JPanel getIdleCard() {
-		return idleCard;
+	public CardLayout getCardLayout() {
+		return this.cardLayout;
+	}
+	
+	public JPanel getSecondaryPanel() {
+		return this.panelSecondary;
+	}
+	
+	public IdlePanel getIdleCard() {
+		return this.idlePanel;
 	}
 	
 	public CreateTaskPanel getCreateTaskCard() {
-		return (CreateTaskPanel) createTaskCard;
+		return this.createTaskPanel;
 	}
 	
 	public MenuTable getMenuTable() {

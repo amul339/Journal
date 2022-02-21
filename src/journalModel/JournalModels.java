@@ -20,6 +20,7 @@ public class JournalModels {
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
 	private static CustomTableModel customtablemodel = new CustomTableModel();
+	private static ArrayList<Subject> subjectDirectory = new ArrayList<Subject>();
 	
 	private static String targetDirectory = System.getProperty("user.home").concat("\\Documents\\Journal");
 	private static String targetSavedLocation = System.getProperty("user.home").concat("\\Documents\\Journal\\savedJData.txt");
@@ -48,8 +49,8 @@ public class JournalModels {
 	}
 	
 	
-	//createTaskIfOk returns true if all UI fields are OK for a task to be created, then creates the task.
-	protected static boolean createTaskIfOk(String txtTaskString, String txtDueString, String comboTaskTypeSelectedString, boolean isCritical) {
+	//createTaskIfOk returns true if task has been created, false if otherwise.
+	protected static boolean createTaskIfOk(String txtTaskString, String txtDueString, String comboSubjectSelectedString, String comboTaskTypeSelectedString, boolean isCritical) {
 		//create task instance if text-box has content, get input from text-box and additional settings.
 		LocalDateTime timeDue = null;
 		
@@ -94,7 +95,7 @@ public class JournalModels {
 					break;
 			}
 			
-			JournalModels.createTaskOnTable(timeDue, isCritical, txtTaskString);
+			JournalModels.createTaskOnTable(timeDue, isCritical, txtTaskString, subject);
 			
 			return true;
 		}
@@ -185,8 +186,8 @@ public class JournalModels {
 		return dataLoadCount;
 	}
 	
-	private static void createTaskOnTable(LocalDateTime timeDue, boolean isCritical, String task) {
-		getCustomTableModel().add(new Task(timeDue, isCritical, task));
+	private static void createTaskOnTable(LocalDateTime timeDue, boolean isCritical, String task, Subject subject) {
+		getCustomTableModel().add(new Task(timeDue, isCritical, task, subject));
 	}
 	
 	protected static void deleteAllTasks() {
@@ -194,8 +195,8 @@ public class JournalModels {
 	}
 	
 	//helper function
-	private static void loadSingleTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task) {
-		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task));
+	private static void loadSingleTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
+		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task, subject));
 	}
 	//Converts task data to strings. Used for saving task data to text.
 	protected static String taskAttribToString(Task task) {
@@ -215,6 +216,7 @@ public class JournalModels {
 	protected static DateTimeFormatter getDateTimeFormatter() {
 		return formatter;
 	}
+
 	
 	//returns current LocalDateTime in string format.
 	protected static String localDateTimeFormatter(LocalDateTime localDateTime) {
