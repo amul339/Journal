@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.border.EtchedBorder;
 
 public class CreateTaskPanel extends JPanel {
 	private JPanel panel;
