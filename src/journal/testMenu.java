@@ -21,6 +21,15 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Component;
+import java.awt.Window.Type;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
+import java.awt.Font;
 
 public class testMenu extends JFrame {
 
@@ -30,7 +39,11 @@ public class testMenu extends JFrame {
 	private CardLayout cardLayout;
 	private JPanel panelInfo;
 	private MenuTablePanel menuTablePanel;
-	private IdlePanel idlePanel;
+	private CreateTaskPanel createTaskPanel;
+	private JButton buttonInfo_CreateTask;
+	private JLabel labelWelcome;
+	private JLabel labelIcon;
+	private ImageIcon logo;
 
 	/**
 	 * Launch the application.
@@ -53,7 +66,6 @@ public class testMenu extends JFrame {
 	 */
 	public testMenu() {
 		setTitle("Journal");
-		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		this.contentPane = new JPanel();
@@ -67,34 +79,48 @@ public class testMenu extends JFrame {
 		this.contentPane.setLayout(gbl_contentPane);
 		
 		this.panelInfo = new JPanel();
-		this.panelInfo.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Journal Alpha", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		FlowLayout fl_panelInfo = (FlowLayout) this.panelInfo.getLayout();
-		fl_panelInfo.setHgap(0);
-		fl_panelInfo.setVgap(50);
+		this.panelInfo.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Journal Alpha", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 16) , new Color(0, 0, 0)));
+		this.panelInfo.setLayout(null);
 		GridBagConstraints gbc_panelInfo = new GridBagConstraints();
+		gbc_panelInfo.ipady = 99;
 		gbc_panelInfo.fill = GridBagConstraints.BOTH;
-		gbc_panelInfo.gridheight = 3;
 		gbc_panelInfo.gridwidth = 2;
-		gbc_panelInfo.insets = new Insets(0, 0, 5, 0);
+		gbc_panelInfo.gridheight = 3;
 		gbc_panelInfo.gridx = 0;
 		gbc_panelInfo.gridy = 0;
 		this.contentPane.add(this.panelInfo, gbc_panelInfo);
 		
+		this.buttonInfo_CreateTask = new JButton("<html> Create a<br> new task! <html>");
+		this.buttonInfo_CreateTask.setFocusable(false);
+		this.buttonInfo_CreateTask.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		this.buttonInfo_CreateTask.setBounds(620, 25, 90, 58);
+		this.panelInfo.add(this.buttonInfo_CreateTask);
+		this.buttonInfo_CreateTask.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		
+		this.labelWelcome = new JLabel("Back again, NAME?");
+		this.labelWelcome.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+		this.labelWelcome.setBounds(10, 28, 274, 30);
+		this.panelInfo.add(this.labelWelcome);
+		
+		this.logo = new ImageIcon(getClass().getResource("/rsz_journal2.png"));
+		this.labelIcon = new JLabel(logo);
+		this.labelIcon.setBounds(725, 30, 33, 50);
+		this.panelInfo.add(this.labelIcon);
+		
 		this.panelPrimary = new JPanel();
+		this.panelPrimary.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Planner", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 12), null));
 		GridBagConstraints gbc_panelPrimary = new GridBagConstraints();
 		gbc_panelPrimary.fill = GridBagConstraints.BOTH;
-		gbc_panelPrimary.insets = new Insets(0, 0, 0, 5);
 		gbc_panelPrimary.gridx = 0;
 		gbc_panelPrimary.gridy = 3;
 		this.contentPane.add(this.panelPrimary, gbc_panelPrimary);
-		this.panelPrimary.setLayout(null);
 		
 		this.cardLayout = new CardLayout();
+		this.panelPrimary.setLayout(new BoxLayout(this.panelPrimary, BoxLayout.X_AXIS));
 		this.menuTablePanel = new MenuTablePanel();
-		this.menuTablePanel.setBounds(10, 5, 355, 420);
 		this.panelPrimary.add(this.menuTablePanel);
 		this.panelSecondary = new JLayeredPane();
-		this.panelSecondary.setBorder(new TitledBorder(null, "Control Panel", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		this.panelSecondary.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Control Panel", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 12), new Color(0, 0, 0)));
 		GridBagConstraints gbc_panelSecondary = new GridBagConstraints();
 		gbc_panelSecondary.fill = GridBagConstraints.BOTH;
 		gbc_panelSecondary.gridx = 1;
@@ -102,9 +128,9 @@ public class testMenu extends JFrame {
 		this.contentPane.add(this.panelSecondary, gbc_panelSecondary);
 		this.panelSecondary.setLayout(cardLayout);
 		
-		this.idlePanel = new IdlePanel();
-		this.idlePanel.setBounds(0, 0, 1, 1);
-		this.panelSecondary.add(this.idlePanel);
+		this.createTaskPanel = new CreateTaskPanel();
+		this.panelSecondary.add(this.createTaskPanel, "name_15684098500800");
+		
 		
 		
 		

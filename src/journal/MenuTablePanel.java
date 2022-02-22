@@ -10,7 +10,6 @@ public class MenuTablePanel extends JScrollPane {
 	public MenuTablePanel() {
 		
 		super(new MenuTable(JournalController.getCustomTableModelCall()));
-		
 	}
 
 }

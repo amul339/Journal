@@ -64,7 +64,7 @@ public class CreateTaskPanel extends JPanel {
 		panel.add(labelDetails);
 		
 		separator = new JSeparator();
-		separator.setBounds(12, 31, 296, 10);
+		separator.setBounds(12, 31, 376, 10);
 		panel.add(separator);
 		
 		labelTitle = new JLabel("Task title");
@@ -80,7 +80,7 @@ public class CreateTaskPanel extends JPanel {
 		
 		txtAreaDesc = new JTextArea();
 		txtAreaDesc.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		txtAreaDesc.setBounds(12, 110, 250, 69);
+		txtAreaDesc.setBounds(12, 105, 250, 35);
 		panel.add(txtAreaDesc);
 		
 		labelDescription = new JLabel("Task description");
@@ -89,69 +89,69 @@ public class CreateTaskPanel extends JPanel {
 		panel.add(labelDescription);
 		
 		separator_1 = new JSeparator();
-		separator_1.setBounds(12, 215, 260, 10);
+		separator_1.setBounds(12, 173, 260, 10);
 		panel.add(separator_1);
 		
 		labelSubjectSelection = new JLabel("Subject Selection");
 		labelSubjectSelection.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		labelSubjectSelection.setBounds(12, 191, 150, 20);
+		labelSubjectSelection.setBounds(12, 149, 150, 20);
 		panel.add(labelSubjectSelection);
 		
 		comboSubjectSelection = new JComboBox();
 		comboSubjectSelection.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		comboSubjectSelection.setBounds(12, 229, 150, 25);
+		comboSubjectSelection.setBounds(12, 180, 150, 25);
 		panel.add(comboSubjectSelection);
 		
 		labelProperties = new JLabel("Mission Parameters");
 		labelProperties.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		labelProperties.setBounds(12, 275, 150, 16);
+		labelProperties.setBounds(12, 217, 150, 16);
 		panel.add(labelProperties);
 		
 		separator_3 = new JSeparator();
-		separator_3.setBounds(12, 295, 260, 16);
+		separator_3.setBounds(12, 237, 260, 16);
 		panel.add(separator_3);
 		
 		labelDue = new JLabel("Task Due\r\n");
 		labelDue.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		labelDue.setBounds(12, 315, 55, 16);
+		labelDue.setBounds(12, 245, 55, 16);
 		panel.add(labelDue);
 		
 		comboDue = new JComboBox();
 		comboDue.setModel(new DefaultComboBoxModel(new String[] {"Midnight", "7 Days", "No Expiration", "<Custom>"}));
 		comboDue.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		comboDue.setBounds(12, 335, 125, 25);
+		comboDue.setBounds(12, 265, 125, 25);
 		panel.add(comboDue);
 		
 		checkBoxCritical = new JCheckBox("Critical");
 		checkBoxCritical.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		checkBoxCritical.setBounds(150, 335, 112, 24);
+		checkBoxCritical.setBounds(150, 265, 112, 24);
 		panel.add(checkBoxCritical);
 		
 		labelCustomDate = new JLabel("Custom Due Date");
 		labelCustomDate.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		labelCustomDate.setBounds(12, 380, 125, 16);
+		labelCustomDate.setBounds(12, 297, 125, 16);
 		panel.add(labelCustomDate);
 		
 		textFieldCustomDate = new JFormattedTextField();
 		textFieldCustomDate.setEnabled(false);
 		textFieldCustomDate.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		textFieldCustomDate.setBounds(12, 400, 150, 20);
+		textFieldCustomDate.setBounds(12, 317, 150, 20);
 		panel.add(textFieldCustomDate);
 		
 		separator_2 = new JSeparator();
-		separator_2.setBounds(12, 430, 296, 10);
+		separator_2.setBounds(12, 349, 296, 10);
 		panel.add(separator_2);
 		
 		buttonCreate = new JButton("Create Task !");
 		buttonCreate.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
 		
-		buttonCreate.setBounds(50, 452, 112, 25);
+		buttonCreate.setBounds(38, 363, 112, 25);
 		panel.add(buttonCreate);
 		
 		buttonClear = new JButton("Clear");
 		buttonClear.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
 		
-		buttonClear.setBounds(190, 452, 72, 25);
+		buttonClear.setBounds(190, 363, 72, 25);
 		panel.add(buttonClear);
 		
 		buttonCreate.addActionListener(new ActionListener() {
