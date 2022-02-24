@@ -179,8 +179,17 @@ public class CreateTaskPanel extends JPanel {
 	
 	public String getComponentComboSubjectSelectedString() {
 		// TODO Auto-generated method stub
-		return null;
+		return comboSubjectSelection.getSelectedItem().toString();
 	}
+	
+	public void addSubjectToComboSubjectSelection(String subject) {
+		this.comboSubjectSelection.addItem(subject);
+	}
+	
+	public void removeAllSubjectsFromComboSubjectSelection() {
+		this.comboSubjectSelection.removeAllItems();
+	}
+	
 	public boolean isComponentChkBoxCriticalChecked() {
 		
 		if (checkBoxCritical.isSelected()) {

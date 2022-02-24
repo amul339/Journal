@@ -12,6 +12,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import journal.JournalController;
 
 
@@ -19,11 +21,24 @@ public class JournalModels {
 	
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
+	private static String username;
 	private static CustomTableModel customtablemodel = new CustomTableModel();
-	private static ArrayList<Subject> subjectDirectory = new ArrayList<Subject>();
+	private static HashMap<String,Subject> subjectDirectory = new HashMap<String,Subject>();
 	
 	private static String targetDirectory = System.getProperty("user.home").concat("\\Documents\\Journal");
 	private static String targetSavedLocation = System.getProperty("user.home").concat("\\Documents\\Journal\\savedJData.txt");
+	
+	private static LocalDateTime recentDueLocalDateTime = null;
+	private static Subject recentSubject = null;
+	
+	protected static void setUsername(String name) {
+		username = name;
+	}
+	
+	protected static void addSubject(String subjectName, String subjectDescription) {
+		subjectDirectory.put(subjectName, new Subject(subjectName, subjectDescription));
+	}
+	
 	
 	//returns boolean (yes if directory exists, otherwise no)
 	protected static void initDirectory() {
@@ -35,24 +50,13 @@ public class JournalModels {
 		    dir.mkdirs();
 		}
 		
-		/*
-		ArrayList<String> arr = new ArrayList<String>();
-		arr.add("END");
-		
-		try {
-			Files.write(Paths.get(targetSavedLocation), arr, StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 	}
 	
 	
-	//createTaskIfOk returns true if task has been created, false if otherwise.
-	protected static boolean createTaskIfOk(String txtTaskString, String txtDueString, String comboSubjectSelectedString, String comboTaskTypeSelectedString, boolean isCritical) {
-		//create task instance if text-box has content, get input from text-box and additional settings.
-		LocalDateTime timeDue = null;
+	//method checks if UI parameters are valid. 
+	//If a custom due date has been chosen, the method will check if this is a valid date. If this chosen date is valid, it will update the recentDueLocalDateTime accordingly.
+	//this is done to avoid parsing the due date again if the checkUIParameters happens to return true (clumsy, I know).
+	protected static boolean checkUIParameters(String txtTaskString, String txtDueString, String comboTaskTypeSelectedString, String comboSubjectSelectedString) {
 		
 		formatter = JournalModels.getDateTimeFormatter();
 		
@@ -62,43 +66,52 @@ public class JournalModels {
 			return false;
 		}
 		
-		
+		//check subject selection
+		try {
+			recentSubject = subjectDirectory.get(comboSubjectSelectedString);
+		}
+		catch (Exception e) {
+			//probably a good idea to create a real error message here but if this is triggered something is horribly wrong.
+			//likely means that method that updates the JComboBox for subject is broken.
+			e.printStackTrace();
+			return false;
+		}
 		
 		if (!txtTaskString.equals("")) {
 			
 			switch(comboTaskTypeSelectedString) {
 			
 				case"Midnight":
-					timeDue = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
+					recentDueLocalDateTime = LocalDateTime.of(java.time.LocalDate.now(), LocalTime.of(23, 59, 59));
 					break;
 				case"7 Days":
-					timeDue = LocalDateTime.of(java.time.LocalDate.now().plusDays(7), java.time.LocalTime.now());
+					recentDueLocalDateTime = LocalDateTime.of(java.time.LocalDate.now().plusDays(7), java.time.LocalTime.now());
 					break;
 				case"No Expiration":
-					timeDue = null;
+					recentDueLocalDateTime = null;
 					break;
 				case"<Custom>":
 					try {
-					timeDue = LocalDateTime.parse(txtDueString, formatter);
+					recentDueLocalDateTime = LocalDateTime.parse(txtDueString, formatter);
 					}
 					catch(DateTimeParseException exception) {
+						//This means that the user specified custom date format is incorrect.
 						return false;
 					}
 					
-					if (timeDue.isBefore(java.time.LocalDateTime.now())) {
+					if (recentDueLocalDateTime.isBefore(java.time.LocalDateTime.now())) {
 						return false;
 					}
 					
 					break;
 				default:
-					timeDue = null;
+					recentDueLocalDateTime = null;
 					break;
 			}
 			
-			JournalModels.createTaskOnTable(timeDue, isCritical, txtTaskString, subject);
-			
 			return true;
 		}
+		//may need to reset recentDueLocalDateTime variable...?? dunno
 		return false;
 	}
 	
@@ -116,78 +129,19 @@ public class JournalModels {
 	//if error found, returns -1.
 	protected static int saveData() {
 		// save each task and its data in text file format
-		int dataSaveCount = 0;
 		
-		try {
-			
-			
-			ArrayList<String> strTableTasks = new ArrayList<String>();
-			ArrayList<Task> tableTasks = getCustomTableModel().getData();
-		
-			Path file = Paths.get(targetSavedLocation);
-			
-			
-			
-			// for each task, convert task to one big string with '^' separating task attributes.
-			//look at method 'taskAttribToString';
-			//store all task to string conversions in array
-			//finally write to file
-			for (Task task : tableTasks) {
-				strTableTasks.add(taskAttribToString(task));
-				dataSaveCount++;
-			}
-			
-			//add indicator for EOF
-			strTableTasks.add("END");
-		
-			Files.write(file, strTableTasks, StandardCharsets.UTF_8);
-			
-			System.out.println("Successfully saved data " + "(" + dataSaveCount + " Tasks" + ")");
-			
-		}
-		catch (Exception ex) {
-			dataSaveCount = -1;
-			System.out.println("Write error");
-			System.out.println(ex);
-		}
-		
-		return dataSaveCount;
 	}
 	
 	//returns number of tasks that have been successfully loaded
 	//if error found, returns -1.
 	protected static int loadSavedData() {
-		int dataLoadCount = 0; // counts how many tasks have been loaded
-		System.out.println("Loading data...");
 		
-		try {
-			@SuppressWarnings("resource")
-			BufferedReader reader = new BufferedReader(new FileReader(targetSavedLocation));
-			String rline = reader.readLine();
-				
-			while(!rline.equals("END")) {
-			
-			
-				String[] data = rline.split("\\^");
-				//timeDue, timeAdded, isCritical, task description
-				loadSingleTaskFromFile(LocalDateTime.parse(data[0], formatter),LocalDateTime.parse(data[1], formatter),Boolean.parseBoolean(data[2]),data[3]);
-				rline = reader.readLine();
-				dataLoadCount++;
-			
-			}
-			
-			System.out.println("Successfully loaded data");
-		}
-		catch(Exception ex) {
-			System.out.println("Failed to load data on file line " + dataLoadCount + ", possibly corrupt?");
-			dataLoadCount = -1;
-		}
-		
-		return dataLoadCount;
 	}
 	
-	private static void createTaskOnTable(LocalDateTime timeDue, boolean isCritical, String task, Subject subject) {
-		getCustomTableModel().add(new Task(timeDue, isCritical, task, subject));
+	//Task instance gets generated and then is recorded onto table model.
+	protected static void createTaskOnTable(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
+		System.out.println(task);
+		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task, subject));
 	}
 	
 	protected static void deleteAllTasks() {
@@ -209,6 +163,10 @@ public class JournalModels {
 		return dueTime + "^" + addedTime + "^" + isCritical + "^" + taskDesc;
 	}
 	
+	protected static HashMap<String, Subject> getSubjectDirectory() {
+		return subjectDirectory;
+	}
+	
 	protected static CustomTableModel getCustomTableModel() {
 		return customtablemodel;
 	}
@@ -216,8 +174,15 @@ public class JournalModels {
 	protected static DateTimeFormatter getDateTimeFormatter() {
 		return formatter;
 	}
-
 	
+	protected static Subject getRecentSubject() {
+		return recentSubject;
+	}
+	
+	protected static LocalDateTime getRecentDueLocalDateTime() {
+		return recentDueLocalDateTime;
+	}
+
 	//returns current LocalDateTime in string format.
 	protected static String localDateTimeFormatter(LocalDateTime localDateTime) {
 		
@@ -228,5 +193,8 @@ public class JournalModels {
 			return "-";
 		}
 	}
+
+
+	
 
 }

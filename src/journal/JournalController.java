@@ -7,15 +7,52 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
 public class JournalController extends JournalModels {
-	final static String CREATETASKPANEL = "Create Task Panel";
-	final static String IDLEPANEL = "Idle Panel";
 
-	//ALL PRIVATE FUNCTIONS 
+	//ALL PRIVATE FUNCTIONS
+	
+	public static void journalSetup() {
+		String nameString = Main.getSetup().getNameString();
+		String subject1String = Main.getSetup().getSubject1String();
+		String subject2String = Main.getSetup().getSubject2String();
+		String subject3String = Main.getSetup().getSubject3String();
+		String subject4String = Main.getSetup().getSubject4String();
+		//THIS SHOULD BE DONE IN A BETTER WAY FOR A LATER VERSION OF JOURNAL
+		//    TODO make a more robust way of creating a subject.
+		//make sure that whatever the user enters is a valid string
+		
+		//sets username in program memory
+		JournalController.setUsername(nameString);
+		
+		//adds subjects to program memory
+		JournalController.addSubject(subject1String, null);
+		JournalController.addSubject(subject2String, null);
+		JournalController.addSubject(subject3String, null);
+		JournalController.addSubject(subject4String, null);
+
+		
+		//TEMPORARY
+		//start journal once setup is complete
+		Main.launchMenu();
+		refreshSubjectList();
+	}
+	
+	public static void refreshSubjectList() {
+		//first remove everything from subject combo box on create task ui
+		Main.getMenu().getCreateTaskPanel().removeAllSubjectsFromComboSubjectSelection();
+		
+		
+		for (String string : JournalModels.getSubjectDirectory().keySet()) {
+			Main.getMenu().getCreateTaskPanel().addSubjectToComboSubjectSelection(string);
+		}
+	}
+	
+	
 	public static void loadSavedDataCall() {
 		
 		
@@ -56,15 +93,24 @@ public class JournalController extends JournalModels {
 	public static void createTaskFromUI() {
 		//Variables need for this
 		
-		String txtTaskString = JournalController.getComponentTxtTaskString();
-		String txtDueString = JournalController.getComponentTxtDueString();
-		String comboTaskTypeSelectedString = JournalController.getComponentComboTaskTypeSelectedString();
-		String comboSubjectSelectedString = Main.getMenu().getCreateTaskCard().getComboSubjectSelectedString();
+		String txtTaskString = Main.getMenu().getCreateTaskPanel().getComponentTxtTaskString();
+		String txtDueString = Main.getMenu().getCreateTaskPanel().getComponentTxtDueString();
+		String comboTaskTypeSelectedString = Main.getMenu().getCreateTaskPanel().getComponentComboTaskTypeSelectedString();
+		String comboSubjectSelectedString = Main.getMenu().getCreateTaskPanel().getComponentComboSubjectSelectedString();
+		
 		boolean isCritical = JournalController.isComponentChkBoxCriticalChecked();
 		
-		if (JournalModels.createTaskIfOk(txtTaskString, txtDueString,  comboTaskTypeSelectedString, isCritical)) {
-			JournalController.switchToIdlePanel();
-			JournalController.setStatusLabel("Task created successfully");
+		
+		
+		if (JournalModels.checkUIParameters(txtTaskString, txtDueString,  comboTaskTypeSelectedString, comboSubjectSelectedString)) {
+			
+			//most recent parsed due date
+			LocalDateTime recentDueLocalDateTime = JournalController.getRecentDueLocalDateTime();
+			
+			//most recent subject selected (string to object translation already done)
+			Subject recentSubject = JournalController.getRecentSubject();
+			
+			JournalModels.createTaskOnTable(recentDueLocalDateTime, null, isCritical, txtTaskString, recentSubject);
 		}
 		else {
 			JournalController.setComponentTxtDueToBlank();
@@ -74,7 +120,8 @@ public class JournalController extends JournalModels {
 	
 	public static void removeSelectedRow() {
 		
-		int selectedRow = Main.getMenu().getMenuTable().getSelectedRow();
+		int selectedRow = Main.getMenu().getMenuTablePanel().getMenuTable().getSelectedRow();
+		
 		
 		if (JournalModels.removeSelectedRowFromModel(selectedRow)) {
 			JournalController.setDeleteButton(false);
@@ -93,35 +140,26 @@ public class JournalController extends JournalModels {
 	      
 	    //exception keeps happening even with a surrounding if statement?? FIXME
 	      //try-catch to stay for now...
+	      
+	      
 	      try {
-	    	  Main.getMenu().getMenuTable().setSelectedRow(Main.getMenu().getMenuTable().getTableTasks().getRowSorter().convertRowIndexToModel(row));
+	    	  Main.getMenu().getMenuTablePanel().getMenuTable().setSelectedRow(Main.getMenu().getMenuTablePanel().getMenuTable().getRowSorter().convertRowIndexToModel(row));
 	    	  JournalController.setDeleteButton(true);
 	      }
 	      catch (ArrayIndexOutOfBoundsException exception) {
-	    	  Main.getMenu().getMenuTable().setSelectedRow(-1);
+	    	  Main.getMenu().getMenuTablePanel().getMenuTable().setSelectedRow(-1);
 	    	  
 	    	  JournalController.setDeleteButton(false);
 	      }
 		
-	}
-	
-	public static void ClearAllTasksCall() {
-		// TODO Auto-generated method stub
-		if (Main.getMenu().promptClearAllTasks() == 0) {
-			JournalModels.deleteAllTasks();
-			JournalController.setStatusLabel("Cleared All Tasks");
-		}
-		
-	}
-	
-	public static void switchToIdlePanel() {
-		JPanel panelSecondary = Main.getMenu().getSecondaryPanel();
-		Main.getMenu().getCardLayout().show(panelSecondary, IDLEPANEL);
-	}
+	}	
 	
 	public static void switchToCreatePanel() {
-		JPanel panelSecondary = Main.getMenu().getSecondaryPanel();
-		Main.getMenu().getCardLayout().show(panelSecondary, CREATETASKPANEL);
+		//EVERY TIME WE SWITCH, WE NEED TO REFRESH SUBJECT LIST. FIXME
+
+		
+		JLayeredPane panelSecondary = Main.getMenu().getSecondaryPanel();
+		Main.getMenu().getCardLayout().show(panelSecondary, "Create Task Panel");
 	}
 	
 	//UI needs to access this therefore is set to public
@@ -132,35 +170,24 @@ public class JournalController extends JournalModels {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static void setDeleteButton(boolean bool) {
-		Main.getMenu().enableDelete(bool);
+		//Main.getMenu().enableDelete(bool); FIXME
 	}
 	
 	public static void setStatusLabel(String str) {
-		Main.getMenu().setStatusLabel(str);
+		//Main.getMenu().setStatusLabel(str); FIXME
 	}
 	
-	private static String getComponentComboTaskTypeSelectedString() {
-		return Main.getMenu().getCreateTaskCard().getComponentComboTaskTypeSelectedString();
-	}
-	
-	private static String getComponentTxtDueString() {
-		return Main.getMenu().getCreateTaskCard().getComponentTxtDueString();
-	}
-	
-	private static String getComponentTxtTaskString() {
-		return Main.getMenu().getCreateTaskCard().getComponentTxtTaskString();
-	}
 	
 	private static boolean isComponentChkBoxCriticalChecked() {
-		return Main.getMenu().getCreateTaskCard().isComponentChkBoxCriticalChecked();
+		return Main.getMenu().getCreateTaskPanel().isComponentChkBoxCriticalChecked();
 	}
 	
 	private static void setComponentTxtDueToBlank() {
-		Main.getMenu().getCreateTaskCard().setComponentTxtDueToBlank();
+		Main.getMenu().getCreateTaskPanel().setComponentTxtDueToBlank();
 	}
 	
 	public static void showMessageSomethingWentWrong() {
-		JFrame frame = Main.getMenu().getMenuFrame();
+		JFrame frame = Main.getMenu();
 		JOptionPane.showMessageDialog(frame, "Your task cannot be blank or contain any special characters. \nIf you have entered a custom date, please ensure you have entered a FUTURE date in the correct date format of 'dd-MM-yyyy HH:mm:ss'");
 	}
 	

@@ -1,259 +1,133 @@
 package journal;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.border.TitledBorder;
+import javax.swing.BoxLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import javax.swing.JLabel;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.border.BevelBorder;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.Font;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.Border;
+public class Menu extends JFrame {
+	
+	private static int PORT = 7000;
 
-
-public class Menu {
-	private static final int PORT = 7000;
-	
-	final static String CREATETASKPANEL = "Create Task Panel";
-	final static String IDLEPANEL = "Idle Panel";
-	
-	//ALL SUB PANELS FOR MENU ARE REQUIRED TO BE 320X500 IN RESOLUTION
-	
-	private JLabel timeMsg, timeLabel, labelStatus, labelLogo;
-	private Timer timer;
-	private JFrame frameMain;
-	private JPanel panelSecondary;
-	private IdlePanel idlePanel;
-	private CreateTaskPanel createTaskPanel;
-	private JButton buttonDelete;
-	private JMenuBar menuBar;
-	private JMenu menuFile, menuUtilities, menuHelp;
-	private JMenuItem mItemAbout, mItemCreateTask, mItemClrAllTask, mItemLoad, mItemSave, mItemExit;
-	private ImageIcon icon;
+	private JPanel contentPane;
+	private JLayeredPane panelSecondary;
+	private JPanel panelPrimary;
 	private CardLayout cardLayout;
-	
-	private CreateTaskUI createtaskui;
-	private MenuTable menutable;
+	private JPanel panelInfo;
+	private MenuTablePanel menuTablePanel;
+	private CreateTaskPanel createTaskPanel;
+	private JButton buttonInfo_CreateTask;
+	private JLabel labelWelcome;
+	private JLabel labelIcon;
 	private ImageIcon logo;
-	
-	public Menu()  {
+
+	public Menu() {
+		setTitle("Journal");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 600);
+		this.contentPane = new JPanel();
+		this.contentPane.setBorder(new CompoundBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), new EtchedBorder(EtchedBorder.LOWERED, null, null)));
+		setContentPane(this.contentPane);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{393, 393, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 563, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		this.contentPane.setLayout(gbl_contentPane);
 		
-		//assign frames
-		this.frameMain = new JFrame("Journal");
-		//assign menu table, call controller for model assignment.
-		this.menutable = new MenuTable(JournalController.getCustomTableModelCall());
-		this.icon = new ImageIcon(getClass().getResource("/journal.png"));
-		//assignment tool-bar and menu items
-		this.menuBar = new JMenuBar();
-		this.menuFile = new JMenu("File");
-		this.menuHelp = new JMenu("Help");
-		this.menuUtilities = new JMenu("Utilities");
-		this.mItemAbout = new JMenuItem("About");
-		this.mItemLoad = new JMenuItem("Load");
-		this.mItemSave = new JMenuItem("Save");
-		this.mItemExit = new JMenuItem("Exit");
-		this.mItemCreateTask = new JMenuItem("Create Task");
-		this.mItemClrAllTask = new JMenuItem("Clear All Tasks");
+		this.panelInfo = new JPanel();
+		this.panelInfo.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Journal Alpha", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 16) , new Color(0, 0, 0)));
+		this.panelInfo.setLayout(null);
+		GridBagConstraints gbc_panelInfo = new GridBagConstraints();
+		gbc_panelInfo.ipady = 99;
+		gbc_panelInfo.fill = GridBagConstraints.BOTH;
+		gbc_panelInfo.gridwidth = 2;
+		gbc_panelInfo.gridheight = 3;
+		gbc_panelInfo.gridx = 0;
+		gbc_panelInfo.gridy = 0;
+		this.contentPane.add(this.panelInfo, gbc_panelInfo);
 		
-		//assign panels and other garbage
-		this.timeLabel = new JLabel(JournalController.localDateTimeFormatter(JournalController.getLocalDateTime()), JLabel.CENTER);
-		this.timeMsg  = new JLabel("System time:");
-		this.labelStatus = new JLabel("Journal test build -- https://github.com/amul339");
+		this.buttonInfo_CreateTask = new JButton("<html> Create a<br> new task! <html>");
+		this.buttonInfo_CreateTask.setFocusable(false);
+		this.buttonInfo_CreateTask.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		this.buttonInfo_CreateTask.setBounds(620, 25, 90, 58);
+		this.panelInfo.add(this.buttonInfo_CreateTask);
+		this.buttonInfo_CreateTask.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		
+		this.labelWelcome = new JLabel("Back again, NAME?");
+		this.labelWelcome.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+		this.labelWelcome.setBounds(10, 28, 274, 30);
+		this.panelInfo.add(this.labelWelcome);
 		
-		this.buttonDelete = new JButton("Delete");
+		this.logo = new ImageIcon(getClass().getResource("/rsz_journal2.png"));
+		this.labelIcon = new JLabel(logo);
+		this.labelIcon.setBounds(725, 30, 33, 50);
+		this.panelInfo.add(this.labelIcon);
 		
-		///////////////////////////////
-		//SECONDARY PANEL
+		this.panelPrimary = new JPanel();
+		this.panelPrimary.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Planner", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 12), null));
+		GridBagConstraints gbc_panelPrimary = new GridBagConstraints();
+		gbc_panelPrimary.fill = GridBagConstraints.BOTH;
+		gbc_panelPrimary.gridx = 0;
+		gbc_panelPrimary.gridy = 3;
+		this.contentPane.add(this.panelPrimary, gbc_panelPrimary);
+		
 		this.cardLayout = new CardLayout();
-		this.panelSecondary = new JPanel();
+		this.panelPrimary.setLayout(new BoxLayout(this.panelPrimary, BoxLayout.X_AXIS));
+		this.menuTablePanel = new MenuTablePanel();
+		this.panelPrimary.add(this.menuTablePanel);
+		this.panelSecondary = new JLayeredPane();
+		this.panelSecondary.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Control Panel", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 12), new Color(0, 0, 0)));
+		GridBagConstraints gbc_panelSecondary = new GridBagConstraints();
+		gbc_panelSecondary.fill = GridBagConstraints.BOTH;
+		gbc_panelSecondary.gridx = 1;
+		gbc_panelSecondary.gridy = 3;
+		this.contentPane.add(this.panelSecondary, gbc_panelSecondary);
+		this.panelSecondary.setLayout(cardLayout);
 		
-		
-		//RIGHT HAND SIDE UI CARDS INITIALIZED HERE!!!!
-		this.idlePanel = new IdlePanel();
 		this.createTaskPanel = new CreateTaskPanel();
+		this.panelSecondary.add(this.createTaskPanel, "Create Task Panel");
 		
-		///////////////////////////////
-		menuHelp.add(mItemAbout);
-		menuFile.add(mItemLoad);
-		menuFile.add(mItemSave);
-		menuFile.add(mItemCreateTask);
-		menuFile.add(mItemClrAllTask);
-		menuFile.add(mItemExit);
-		menuBar.add(menuFile);
-		menuBar.add(menuUtilities);
-		menuBar.add(menuHelp);
+		setVisible(true);
 		
-
-		
-		//configure bounds for main panel components
-		timeLabel.setBounds(-30, -15, 200, 100);
-		labelStatus.setBounds(10, 370, 350, 300);
-		timeMsg.setBounds(10,5,100,20);
-		buttonDelete.setBounds(10,425,80,25);
-		menuUtilities.setEnabled(false);
-		mItemLoad.setEnabled(true);
-		buttonDelete.setEnabled(false);
-		panelSecondary.setBounds(440, 20, 320, 500);
-		
-		//panelSecondary.setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		//configure main frame and add panel
-		
-		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frameMain.setLocationRelativeTo(null);
-		frameMain.setSize(800,600);
-		frameMain.setResizable(false);
-		frameMain.setJMenuBar(menuBar);
-		frameMain.setIconImage(icon.getImage());
-		
-		//set layout
-		frameMain.setLayout(null);
-		panelSecondary.setLayout(cardLayout);
-		
-		//add cards to panelSecondary CardLayout
-		panelSecondary.add(idlePanel, IDLEPANEL);
-		panelSecondary.add(createTaskPanel, CREATETASKPANEL);
-		
-		
-		//add components
-		frameMain.add(timeLabel);
-		frameMain.add(labelStatus);
-		frameMain.add(timeMsg);
-		frameMain.add(buttonDelete);
-		frameMain.add(menutable.getScrollTasks());
-		frameMain.add(panelSecondary);
-		
-		
-		mItemAbout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (InstanceHandler.checkPort(InfoUI.getPort())) {
-					new InfoUI();
-				}
-			}
-		});
-		
-		mItemCreateTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cardLayout.show(panelSecondary, CREATETASKPANEL);
-			}
-		});
-		
-		
-		mItemClrAllTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JournalController.ClearAllTasksCall();
-			}
-		});
-		
-		mItemExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		
-		
-		buttonDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JournalController.removeSelectedRow();
-			}
-		});
-		
-		mItemLoad.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JournalController.loadSavedDataCall();
-			}
-		});
-		
-		mItemSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JournalController.saveDataCall();
-			}
-		});
-		
-		
-		
-		/////TIMER FOR CLOCK
-		ActionListener clkPerformer = new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-		    	updateTimeLabel();
-		    }
-		};
-		this.timer = new Timer(1000, clkPerformer);
-		timer.setRepeats(true);
-		timer.start();
-		/////
-
-		frameMain.setLocationRelativeTo(null);
-		frameMain.setVisible(true);
-		
-		
+	}
+	
+	public CreateTaskPanel getCreateTaskPanel() {
+		return this.createTaskPanel;
+	}
+	
+	public MenuTablePanel getMenuTablePanel() {
+		return this.menuTablePanel;
+	}
+	
+	public void showMessageSomethingWentWrong() {
+		JOptionPane.showMessageDialog(this, "Your task cannot be blank or contain any special characters. \nIf you have entered a custom date, please ensure you have entered a FUTURE date in the correct date format of 'dd-MM-yyyy HH:mm:ss'");
 	}
 	
 	public CardLayout getCardLayout() {
 		return this.cardLayout;
 	}
 	
-	public JPanel getSecondaryPanel() {
+	public JLayeredPane getSecondaryPanel() {
 		return this.panelSecondary;
-	}
-	
-	public IdlePanel getIdleCard() {
-		return this.idlePanel;
-	}
-	
-	public CreateTaskPanel getCreateTaskCard() {
-		return this.createTaskPanel;
-	}
-	
-	public MenuTable getMenuTable() {
-		return this.menutable;
-	}
-	
-	public void setStatusLabel(String str) {
-		this.labelStatus.setText(str);
-	}
-	
-		//update timeLabel with current time.
-	private void updateTimeLabel() {
-		this.timeLabel.setText(JournalController.localDateTimeFormatter(JournalController.getLocalDateTime()));
-	}
-	
-	private JButton getDeleteButton() {
-		return this.buttonDelete;
-	}
-	
-	public JFrame getMenuFrame() {
-		return this.frameMain;
-	}
-	
-	public void enableDelete(boolean bool) {
-		// TODO Auto-generated method stub
-		getDeleteButton().setEnabled(bool);
-	}
-	
-	//returns integer for option selected
-	public int promptClearAllTasks() {
-		return JOptionPane.showConfirmDialog(frameMain, "This will clear all tasks from the table.\nAre you sure you want to continue?", "Clear All Tasks?", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
 	}
 	
 	public static int getPort() {
 		return PORT;
 	}
-
-
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
 }

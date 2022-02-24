@@ -47,11 +47,11 @@ private static final long serialVersionUID = 1L;
     	Task task = tasks.get(rowIndex);
     	switch (columnIndex) {
     	case 0:
-    		return task.toString();
+    		return task.getSubject().toString();
     	case 1:
-    		return JournalModels.localDateTimeFormatter(task.getDueLocalDateTime());
+    		return task.toString();
     	case 2:
-    		return JournalModels.localDateTimeFormatter(task.getAddedLocalDateTime());
+    		return JournalModels.localDateTimeFormatter(task.getDueLocalDateTime());
     	}
     	return null;
     }

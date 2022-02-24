@@ -12,22 +12,19 @@ public class Task {
 	private LocalDateTime timeAdded, timeDue;
 	
 	
-	public Task(LocalDateTime timeDue, boolean isCritical, String task, Subject subject) {
-		this.timeDue= timeDue;
-		this.task = task;
-		this.isCritical = isCritical;
-		this.timeAdded = JournalController.getLocalDateTime();
-		
-	}
-	
-	
-	//alternate task constructor for loading data from 
 	public Task(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
 		this.timeDue = timeDue;
 		this.task = task;
 		this.isCritical = isCritical;
-		this.timeAdded = timeAdded;
 		this.subject = subject;
+		
+		if (timeAdded == null) {
+			this.timeAdded = JournalController.getLocalDateTime();
+		}
+		else {
+			this.timeAdded = timeAdded;
+		}
+		
 	}
 	
 	public boolean checkIfCritical() {
@@ -40,6 +37,10 @@ public class Task {
 	
 	public LocalDateTime getAddedLocalDateTime() {
 		return this.timeAdded;
+	}
+	
+	public Subject getSubject() {
+		return this.subject;
 	}
 
 	
