@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -31,6 +33,7 @@ public class Menu extends JFrame {
 	private JPanel panelInfo;
 	private MenuTablePanel menuTablePanel;
 	private CreateTaskPanel createTaskPanel;
+	private IdlePanel idlePanel;
 	private JButton buttonInfo_CreateTask;
 	private JLabel labelWelcome;
 	private JLabel labelIcon;
@@ -100,15 +103,30 @@ public class Menu extends JFrame {
 		this.contentPane.add(this.panelSecondary, gbc_panelSecondary);
 		this.panelSecondary.setLayout(cardLayout);
 		
+		this.idlePanel = new IdlePanel();
 		this.createTaskPanel = new CreateTaskPanel();
+		this.panelSecondary.add(this.idlePanel, "Idle Panel");
 		this.panelSecondary.add(this.createTaskPanel, "Create Task Panel");
 		
+		setResizable(false);
 		setVisible(true);
+		
+		
+		buttonInfo_CreateTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JournalController.switchToCreatePanel();
+			}
+			
+		});	
 		
 	}
 	
 	public CreateTaskPanel getCreateTaskPanel() {
 		return this.createTaskPanel;
+	}
+	
+	public IdlePanel getIdlePanel() {
+		return this.idlePanel;
 	}
 	
 	public MenuTablePanel getMenuTablePanel() {

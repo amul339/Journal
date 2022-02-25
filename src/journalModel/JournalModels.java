@@ -127,40 +127,24 @@ public class JournalModels {
 	
 	//returns the number of tasks successfully saved to file.
 	//if error found, returns -1.
-	protected static int saveData() {
+	protected static void saveData() {
 		// save each task and its data in text file format
 		
 	}
 	
 	//returns number of tasks that have been successfully loaded
 	//if error found, returns -1.
-	protected static int loadSavedData() {
-		
+	protected static void loadSavedData() {
+	
 	}
 	
 	//Task instance gets generated and then is recorded onto table model.
 	protected static void createTaskOnTable(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
-		System.out.println(task);
 		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task, subject));
 	}
 	
 	protected static void deleteAllTasks() {
 		getCustomTableModel().removeAll();
-	}
-	
-	//helper function
-	private static void loadSingleTaskFromFile(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
-		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task, subject));
-	}
-	//Converts task data to strings. Used for saving task data to text.
-	protected static String taskAttribToString(Task task) {
-		String taskDesc = task.toString();
-		String addedTime = localDateTimeFormatter(task.getAddedLocalDateTime());
-		String dueTime = localDateTimeFormatter(task.getDueLocalDateTime());
-		String isCritical = Boolean.toString(task.checkIfCritical());
-		
-		
-		return dueTime + "^" + addedTime + "^" + isCritical + "^" + taskDesc;
 	}
 	
 	protected static HashMap<String, Subject> getSubjectDirectory() {

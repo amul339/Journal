@@ -2,10 +2,12 @@ package journal;
 
 import journalModel.*;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -40,6 +42,23 @@ public class JournalController extends JournalModels {
 		//start journal once setup is complete
 		Main.launchMenu();
 		refreshSubjectList();
+	}
+	
+	//This method is triggered when there is a detected change in the JComboBox 'comboDue'
+	//Custom date JTextField 'textFieldCustomDate' is either enabled or disabled depending on if '<Custom>' option has been selected.
+	public static void comboDueCustomSensor(ActionEvent e) {
+		
+		JComboBox<String> comboTaskType = (JComboBox<String>) e.getSource();
+		
+		Object selected = comboTaskType.getSelectedItem();
+		if (selected.toString().equals("<Custom>")) {
+			Main.getMenu().getCreateTaskPanel().enableCustomDateField(true);
+		}
+		else {
+			Main.getMenu().getCreateTaskPanel().enableCustomDateField(false);
+			Main.getMenu().getCreateTaskPanel().clearCustomDateField();
+		}
+		
 	}
 	
 	public static void refreshSubjectList() {
@@ -111,9 +130,12 @@ public class JournalController extends JournalModels {
 			Subject recentSubject = JournalController.getRecentSubject();
 			
 			JournalModels.createTaskOnTable(recentDueLocalDateTime, null, isCritical, txtTaskString, recentSubject);
+			
+			//switch to idle panel after task creation is done
+			switchToIdlePanel();
 		}
 		else {
-			JournalController.setComponentTxtDueToBlank();
+			Main.getMenu().getCreateTaskPanel().clearCustomDateField();
 			JournalController.showMessageSomethingWentWrong();
 		}
 	}
@@ -152,12 +174,19 @@ public class JournalController extends JournalModels {
 	    	  JournalController.setDeleteButton(false);
 	      }
 		
-	}	
+	}
+	
+	public static void switchToIdlePanel() {
+		JLayeredPane panelSecondary = Main.getMenu().getSecondaryPanel();
+		
+		Main.getMenu().getCardLayout().show(panelSecondary, "Idle Panel");
+	}
 	
 	public static void switchToCreatePanel() {
-		//EVERY TIME WE SWITCH, WE NEED TO REFRESH SUBJECT LIST. FIXME
-
+		//EVERY TIME WE SWITCH, WE NEED TO REFRESH SUBJECT LIST
+		refreshSubjectList();
 		
+		//creating new variable? TODO
 		JLayeredPane panelSecondary = Main.getMenu().getSecondaryPanel();
 		Main.getMenu().getCardLayout().show(panelSecondary, "Create Task Panel");
 	}
@@ -182,9 +211,6 @@ public class JournalController extends JournalModels {
 		return Main.getMenu().getCreateTaskPanel().isComponentChkBoxCriticalChecked();
 	}
 	
-	private static void setComponentTxtDueToBlank() {
-		Main.getMenu().getCreateTaskPanel().setComponentTxtDueToBlank();
-	}
 	
 	public static void showMessageSomethingWentWrong() {
 		JFrame frame = Main.getMenu();

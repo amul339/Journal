@@ -133,7 +133,7 @@ public class CreateTaskPanel extends JPanel {
 		panel.add(labelCustomDate);
 		
 		textFieldCustomDate = new JFormattedTextField();
-		textFieldCustomDate.setEnabled(false);
+		this.textFieldCustomDate.setEnabled(false);
 		textFieldCustomDate.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		textFieldCustomDate.setBounds(12, 317, 150, 20);
 		panel.add(textFieldCustomDate);
@@ -161,8 +161,12 @@ public class CreateTaskPanel extends JPanel {
 			
 		});
 		
-		
-		
+		comboDue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JournalController.comboDueCustomSensor(e);
+			}
+			
+		});	
 
 	}
 	public String getComponentComboTaskTypeSelectedString() {
@@ -182,6 +186,7 @@ public class CreateTaskPanel extends JPanel {
 		return comboSubjectSelection.getSelectedItem().toString();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void addSubjectToComboSubjectSelection(String subject) {
 		this.comboSubjectSelection.addItem(subject);
 	}
@@ -199,9 +204,13 @@ public class CreateTaskPanel extends JPanel {
 		return false;
 	}
 	
-	public void setComponentTxtDueToBlank() {
-		textFieldCustomDate.setText("");
+	public void enableCustomDateField(boolean bool) {
+		this.textFieldCustomDate.setEnabled(bool);
+		this.labelCustomDate.setEnabled(bool);
 	}
 	
+	public void clearCustomDateField() {
+		this.textFieldCustomDate.setText("");
+	}
 	
 }
