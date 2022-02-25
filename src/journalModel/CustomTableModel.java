@@ -49,7 +49,7 @@ private static final long serialVersionUID = 1L;
     	case 0:
     		return task.getSubject().toString();
     	case 1:
-    		return task.toString();
+    		return task; //contains reference to actual task object which when printed, prints the name of the task.
     	case 2:
     		return JournalModels.localDateTimeFormatter(task.getDueLocalDateTime());
     	}

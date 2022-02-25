@@ -152,20 +152,53 @@ public class JournalController extends JournalModels {
 		//Update UI Label to say that row has been removed?
 	}
 	
+	public static void updateDetailPanel() {
+		
+		int selectedRow = Main.getMenu().getMenuTablePanel().getMenuTable().getSelectedRow();
+				
+		int jeff = Main.getMenu().getMenuTablePanel().getMenuTable().getRowSorter().convertRowIndexToModel(selectedRow);
+		
+		
+		
+	}
+	
+	//
+	public static void switchToDetailPanel(MouseEvent e) {
+		
+		JTable src = (JTable) e.getSource();
+	      int row = src.rowAtPoint(e.getPoint());
+	      
+	      
+	      
+		
+	}
 	
 	/// this method could probably be moved to a dedicated journal 'sensor' package to separate out other method calls.
 	public static void deleteButtonTableSensor(MouseEvent e) {
 		
 		JTable src = (JTable) e.getSource();
 	      int row = src.rowAtPoint(e.getPoint());
-	      //int col = src.columnAtPoint(e.getPoint());
+	      int col = src.columnAtPoint(e.getPoint());
 	      
 	    //exception keeps happening even with a surrounding if statement?? FIXME
 	      //try-catch to stay for now...
 	      
 	      
 	      try {
+	    	  
+	    	  //sets the selected row on the table using information from mouse event e
+	    	  //convertRowIndexToModel() method is called because even though we know the row, this row number does not correspond necessarily to that on the model,
+	    	  //as the table may be graphically sorted.
+	    	  //25/02/2022 this try-catch statement is very scuffed as the 2nd method executed can only be executed if the first method does not fail.
 	    	  Main.getMenu().getMenuTablePanel().getMenuTable().setSelectedRow(Main.getMenu().getMenuTablePanel().getMenuTable().getRowSorter().convertRowIndexToModel(row));
+	    	  //get data from row
+	    	  int modelRow = Main.getMenu().getMenuTablePanel().getMenuTable().getSelectedRow();
+	    	  
+	    	  Task task = (Task) Main.getMenu().getMenuTablePanel().getMenuTable().getValueAt(row, 1);
+	    	  
+	    	  System.out.println(task.getSubject());
+	    	  
+	    	  
 	    	  JournalController.setDeleteButton(true);
 	      }
 	      catch (ArrayIndexOutOfBoundsException exception) {
