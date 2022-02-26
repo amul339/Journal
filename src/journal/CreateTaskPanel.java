@@ -161,6 +161,13 @@ public class CreateTaskPanel extends JPanel {
 			
 		});
 		
+		buttonClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JournalController.clearAllCreateTaskFieldsCall();
+			}
+			
+		});
+		
 		comboDue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JournalController.comboDueCustomSensor(e);

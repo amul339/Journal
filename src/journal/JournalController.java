@@ -44,6 +44,10 @@ public class JournalController extends JournalModels {
 		refreshSubjectList();
 	}
 	
+	public static void welcomeMessage(String name) {
+		Main.getMenu().setComponentLabelWelcome("Back again, " + name + "?");
+	}
+	
 	//This method is triggered when there is a detected change in the JComboBox 'comboDue'
 	//Custom date JTextField 'textFieldCustomDate' is either enabled or disabled depending on if '<Custom>' option has been selected.
 	public static void comboDueCustomSensor(ActionEvent e) {
@@ -148,10 +152,7 @@ public class JournalController extends JournalModels {
 		
 		int selectedRow = Main.getMenu().getMenuTablePanel().getMenuTable().getSelectedRow();
 		
-		
-		if (JournalModels.removeSelectedRowFromModel(selectedRow)) {
-			JournalController.setDeleteButton(false);
-		}
+		JournalModels.removeSelectedRowFromModel(selectedRow);
 		
 		//Update UI Label to say that row has been removed?
 	}
@@ -178,18 +179,6 @@ public class JournalController extends JournalModels {
 		}
 		
 	}
-	
-	//
-	public static void switchToDetailPanel(MouseEvent e) {
-		
-		JTable src = (JTable) e.getSource();
-	      int row = src.rowAtPoint(e.getPoint());
-	      
-	      
-	      
-		
-	}
-	
 	/// this method could probably be moved to a dedicated journal 'sensor' package to separate out other method calls.
 	public static void tableSensor(MouseEvent e) {
 		
@@ -216,12 +205,10 @@ public class JournalController extends JournalModels {
 	    	  updateDetailPanel(task);
 	    	  switchToDetailPanel();
 	    	  
-	    	  JournalController.setDeleteButton(true);
 	      }
 	      catch (ArrayIndexOutOfBoundsException exception) {
 	    	  Main.getMenu().getMenuTablePanel().getMenuTable().setSelectedRow(-1);
 	    	  
-	    	  JournalController.setDeleteButton(false);
 	      }
 		
 	}
@@ -263,16 +250,11 @@ public class JournalController extends JournalModels {
 		return JournalModels.getCustomTableModel();
 	}
 	
+	public static void clearAllCreateTaskFieldsCall() {
+		Main.getMenu().getCreateTaskPanel().clearAllFields();
+	}
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static void setDeleteButton(boolean bool) {
-		//Main.getMenu().enableDelete(bool); FIXME
-	}
-	
-	public static void setStatusLabel(String str) {
-		//Main.getMenu().setStatusLabel(str); FIXME
-	}
-	
 	
 	private static boolean isComponentChkBoxCriticalChecked() {
 		return Main.getMenu().getCreateTaskPanel().isComponentChkBoxCriticalChecked();

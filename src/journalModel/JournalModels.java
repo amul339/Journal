@@ -115,14 +115,11 @@ public class JournalModels {
 		return false;
 	}
 	
-	protected static boolean removeSelectedRowFromModel(int selectedRow) {
+	protected static void removeSelectedRowFromModel(int selectedRow) {
 		
 		if (selectedRow != -1) {
 			getCustomTableModel().removeRow(selectedRow);
-			return true;
 		}
-		
-		return false;
 	}
 	
 	//returns the number of tasks successfully saved to file.

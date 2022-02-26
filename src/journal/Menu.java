@@ -145,6 +145,10 @@ public class Menu extends JFrame {
 		buttonInfo_CreateTask.setEnabled(bool);
 	}
 	
+	public void setComponentLabelWelcome(String str) {
+		labelWelcome.setText(str);
+	}
+	
 	public void showMessageSomethingWentWrong() {
 		JOptionPane.showMessageDialog(this, "Your task cannot be blank or contain any special characters. \nIf you have entered a custom date, please ensure you have entered a FUTURE date in the correct date format of 'dd-MM-yyyy HH:mm:ss'");
 	}
