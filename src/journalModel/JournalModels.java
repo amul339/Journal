@@ -139,8 +139,8 @@ public class JournalModels {
 	}
 	
 	//Task instance gets generated and then is recorded onto table model.
-	protected static void createTaskOnTable(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
-		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task, subject));
+	protected static void createTaskOnTable(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject, String description) {
+		getCustomTableModel().add(new Task(timeDue, timeAdded, isCritical, task, subject, description));
 	}
 	
 	protected static void deleteAllTasks() {

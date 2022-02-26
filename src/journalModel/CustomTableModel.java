@@ -47,7 +47,7 @@ private static final long serialVersionUID = 1L;
     	Task task = tasks.get(rowIndex);
     	switch (columnIndex) {
     	case 0:
-    		return task.getSubject().toString();
+    		return task.getSubject();
     	case 1:
     		return task; //contains reference to actual task object which when printed, prints the name of the task.
     	case 2:

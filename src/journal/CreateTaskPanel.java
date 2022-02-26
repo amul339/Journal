@@ -166,9 +166,15 @@ public class CreateTaskPanel extends JPanel {
 				JournalController.comboDueCustomSensor(e);
 			}
 			
-		});	
-
+		});
+		
+	
 	}
+	
+	public String getComponentTxtAreaDescString() {
+		return this.txtAreaDesc.getText();
+	}
+	
 	public String getComponentComboTaskTypeSelectedString() {
 		return comboDue.getSelectedItem().toString();
 	}
@@ -207,6 +213,12 @@ public class CreateTaskPanel extends JPanel {
 	public void enableCustomDateField(boolean bool) {
 		this.textFieldCustomDate.setEnabled(bool);
 		this.labelCustomDate.setEnabled(bool);
+	}
+	
+	public void clearAllFields() {
+		this.textFieldCustomDate.setText("");
+		this.txtAreaDesc.setText("");
+		this.txtTitle.setText("");
 	}
 	
 	public void clearCustomDateField() {

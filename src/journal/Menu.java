@@ -39,6 +39,8 @@ public class Menu extends JFrame {
 	private JLabel labelIcon;
 	private ImageIcon logo;
 
+	private DetailPanel detailPanel;
+
 	public Menu() {
 		setTitle("Journal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,7 +74,7 @@ public class Menu extends JFrame {
 		this.panelInfo.add(this.buttonInfo_CreateTask);
 		this.buttonInfo_CreateTask.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		
-		this.labelWelcome = new JLabel("Back again, NAME?");
+		this.labelWelcome = new JLabel("Back again?");
 		this.labelWelcome.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
 		this.labelWelcome.setBounds(10, 28, 274, 30);
 		this.panelInfo.add(this.labelWelcome);
@@ -104,8 +106,10 @@ public class Menu extends JFrame {
 		this.panelSecondary.setLayout(cardLayout);
 		
 		this.idlePanel = new IdlePanel();
+		this.detailPanel = new DetailPanel();
 		this.createTaskPanel = new CreateTaskPanel();
 		this.panelSecondary.add(this.idlePanel, "Idle Panel");
+		this.panelSecondary.add(this.detailPanel, "Detail Panel");
 		this.panelSecondary.add(this.createTaskPanel, "Create Task Panel");
 		
 		setResizable(false);
@@ -125,12 +129,20 @@ public class Menu extends JFrame {
 		return this.createTaskPanel;
 	}
 	
+	public DetailPanel getDetailPanel() {
+		return this.detailPanel;
+	}
+	
 	public IdlePanel getIdlePanel() {
 		return this.idlePanel;
 	}
 	
 	public MenuTablePanel getMenuTablePanel() {
 		return this.menuTablePanel;
+	}
+	
+	public void enableCreateTaskButton(boolean bool) {
+		buttonInfo_CreateTask.setEnabled(bool);
 	}
 	
 	public void showMessageSomethingWentWrong() {

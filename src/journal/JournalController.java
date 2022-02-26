@@ -116,6 +116,7 @@ public class JournalController extends JournalModels {
 		String txtDueString = Main.getMenu().getCreateTaskPanel().getComponentTxtDueString();
 		String comboTaskTypeSelectedString = Main.getMenu().getCreateTaskPanel().getComponentComboTaskTypeSelectedString();
 		String comboSubjectSelectedString = Main.getMenu().getCreateTaskPanel().getComponentComboSubjectSelectedString();
+		String txtAreaDescString = Main.getMenu().getCreateTaskPanel().getComponentTxtAreaDescString();
 		
 		boolean isCritical = JournalController.isComponentChkBoxCriticalChecked();
 		
@@ -129,10 +130,13 @@ public class JournalController extends JournalModels {
 			//most recent subject selected (string to object translation already done)
 			Subject recentSubject = JournalController.getRecentSubject();
 			
-			JournalModels.createTaskOnTable(recentDueLocalDateTime, null, isCritical, txtTaskString, recentSubject);
+			JournalModels.createTaskOnTable(recentDueLocalDateTime, null, isCritical, txtTaskString, recentSubject, txtAreaDescString);
 			
 			//switch to idle panel after task creation is done
 			switchToIdlePanel();
+			
+			//clear fields
+			Main.getMenu().getCreateTaskPanel().clearAllFields();
 		}
 		else {
 			Main.getMenu().getCreateTaskPanel().clearCustomDateField();
@@ -152,13 +156,26 @@ public class JournalController extends JournalModels {
 		//Update UI Label to say that row has been removed?
 	}
 	
-	public static void updateDetailPanel() {
+	//Update detail panel UI corresponding with input Task 'task'. i.e. description.
+	public static void updateDetailPanel(Task task) {
+		String taskTitleString = task.toString();
+		String taskSubjectString = task.getSubject().toString();
+		String taskDescriptionString = task.getDescription();
+		String taskTimeAddedString = JournalController.localDateTimeFormatter(task.getAddedLocalDateTime());
+		boolean taskIsCritical = task.checkIfCritical();
 		
-		int selectedRow = Main.getMenu().getMenuTablePanel().getMenuTable().getSelectedRow();
-				
-		int jeff = Main.getMenu().getMenuTablePanel().getMenuTable().getRowSorter().convertRowIndexToModel(selectedRow);
+		//update detail panel ui
+		Main.getMenu().getDetailPanel().setComponentLblTask(taskTitleString);
+		Main.getMenu().getDetailPanel().setComponentLblDescription(taskDescriptionString);
+		Main.getMenu().getDetailPanel().setComponentLblSubject(taskSubjectString);
+		Main.getMenu().getDetailPanel().setComponentLblDate(taskTimeAddedString);
 		
-		
+		if (taskIsCritical) {
+			Main.getMenu().getDetailPanel().setComponentLblCritical("Yes");
+		}
+		else {
+			Main.getMenu().getDetailPanel().setComponentLblCritical("No");
+		}
 		
 	}
 	
@@ -174,7 +191,7 @@ public class JournalController extends JournalModels {
 	}
 	
 	/// this method could probably be moved to a dedicated journal 'sensor' package to separate out other method calls.
-	public static void deleteButtonTableSensor(MouseEvent e) {
+	public static void tableSensor(MouseEvent e) {
 		
 		JTable src = (JTable) e.getSource();
 	      int row = src.rowAtPoint(e.getPoint());
@@ -191,13 +208,13 @@ public class JournalController extends JournalModels {
 	    	  //as the table may be graphically sorted.
 	    	  //25/02/2022 this try-catch statement is very scuffed as the 2nd method executed can only be executed if the first method does not fail.
 	    	  Main.getMenu().getMenuTablePanel().getMenuTable().setSelectedRow(Main.getMenu().getMenuTablePanel().getMenuTable().getRowSorter().convertRowIndexToModel(row));
+	    	  
 	    	  //get data from row
-	    	  int modelRow = Main.getMenu().getMenuTablePanel().getMenuTable().getSelectedRow();
-	    	  
 	    	  Task task = (Task) Main.getMenu().getMenuTablePanel().getMenuTable().getValueAt(row, 1);
+	    	  //update detail panel with current selected task
 	    	  
-	    	  System.out.println(task.getSubject());
-	    	  
+	    	  updateDetailPanel(task);
+	    	  switchToDetailPanel();
 	    	  
 	    	  JournalController.setDeleteButton(true);
 	      }
@@ -209,10 +226,25 @@ public class JournalController extends JournalModels {
 		
 	}
 	
+	public static void updateControlPanelStatus(String msg) {
+		//update control panel titled border here... TODO
+	}
+	
+	public static void switchToDetailPanel() {
+		JLayeredPane panelSecondary = Main.getMenu().getSecondaryPanel();
+		
+		Main.getMenu().getCardLayout().show(panelSecondary, "Detail Panel");
+		
+		Main.getMenu().enableCreateTaskButton(true);
+	}
+	
 	public static void switchToIdlePanel() {
 		JLayeredPane panelSecondary = Main.getMenu().getSecondaryPanel();
 		
 		Main.getMenu().getCardLayout().show(panelSecondary, "Idle Panel");
+		
+		Main.getMenu().enableCreateTaskButton(true);
+
 	}
 	
 	public static void switchToCreatePanel() {
@@ -222,6 +254,8 @@ public class JournalController extends JournalModels {
 		//creating new variable? TODO
 		JLayeredPane panelSecondary = Main.getMenu().getSecondaryPanel();
 		Main.getMenu().getCardLayout().show(panelSecondary, "Create Task Panel");
+		
+		Main.getMenu().enableCreateTaskButton(false);
 	}
 	
 	//UI needs to access this therefore is set to public

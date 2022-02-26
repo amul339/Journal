@@ -10,13 +10,15 @@ public class Task {
 	private String task;
 	private Subject subject;
 	private LocalDateTime timeAdded, timeDue;
+	private String description;
 	
 	
-	public Task(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject) {
+	public Task(LocalDateTime timeDue, LocalDateTime timeAdded, boolean isCritical, String task, Subject subject, String description) {
 		this.timeDue = timeDue;
 		this.task = task;
 		this.isCritical = isCritical;
 		this.subject = subject;
+		this.description = description;
 		
 		if (timeAdded == null) {
 			this.timeAdded = JournalController.getLocalDateTime();
@@ -41,6 +43,10 @@ public class Task {
 	
 	public Subject getSubject() {
 		return this.subject;
+	}
+	
+	public String getDescription() {
+		return this.description;
 	}
 
 	

@@ -44,8 +44,7 @@ public class MenuTable extends JTable {
 		addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mousePressed(MouseEvent e) {	
-		    	JournalController.switchToDetailPanel(e);
-		    	JournalController.deleteButtonTableSensor(e);
+		    	JournalController.tableSensor(e);
 		    }
 		  	});
 	}
